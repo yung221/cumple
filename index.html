@@ -6,12 +6,11 @@
 <title>Cumpleaños de Mónica ✦</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<!-- GSAP para animaciones premium -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--deep:#0a0118;--sec:#110622;--pink:#ff6b9d;--gold:#ffd700;--coral:#ff8a80;--lav:#e8d5f5;--teal:#64ffda}
-body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow:hidden;height:100vh;width:100vw}
+body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow:hidden;height:100vh;width:100vw;cursor:crosshair}
 
 /* === CANVAS PARTÍCULAS === */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
@@ -66,7 +65,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
 .bg-sou{background:radial-gradient(ellipse at 50% 40%,rgba(255,215,0,.06) 0%,transparent 55%),var(--deep)}
 .bg-far{background:radial-gradient(ellipse at 50% 50%,rgba(255,107,157,.1) 0%,transparent 50%),var(--deep)}
 
-/* Tipografía y elementos */
+/* Tipografía */
 .tg{background:linear-gradient(135deg,var(--pink),var(--gold),var(--pink));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stit{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.6rem,5vw,2.3rem);margin-bottom:6px}
 .ssub{font-weight:300;font-size:clamp(.82rem,2.2vw,1rem);color:var(--lav);margin-bottom:24px}
@@ -76,12 +75,15 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
 /* Botones */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;border:none;transition:all .3s;text-decoration:none;color:#fff}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.btn:active{transform:scale(0.95)}
 .btn-gold{background:linear-gradient(135deg,#ffd700,#f0a500);color:#1a0a2e}
 .btn-gold:hover{box-shadow:0 8px 30px rgba(255,215,0,.3)}
 .btn-green{background:linear-gradient(135deg,#25d366,#128c7e)}
 .btn-green:hover{box-shadow:0 8px 30px rgba(37,211,102,.3)}
 .btn-teal{background:linear-gradient(135deg,#64ffda,#00bfa5);color:#0a0118}
 .btn-teal:hover{box-shadow:0 8px 30px rgba(100,255,218,.3)}
+.btn-outline{background:transparent;border:2px solid var(--gold);color:var(--gold)}
+.btn-outline:hover{background:rgba(255,215,0,.1)}
 
 /* Host cards */
 .hcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;backdrop-filter:blur(8px)}
@@ -103,11 +105,9 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
 .souvenir-input::placeholder{color:rgba(255,255,255,.3);font-family:'Poppins',sans-serif;font-size:.85rem}
 
 /* === NAVIGATION BUTTONS === */
-.nav-btn{position:fixed;right:24px;z-index:100;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:var(--gold);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:0;pointer-events:none}
-.nav-btn:hover{background:rgba(255,215,0,.15);transform:scale(1.1)}
-.nav-btn.show{opacity:1;pointer-events:auto}
-#nextBtn{bottom:30px}
-#prevBtn{bottom:90px}
+#nextBtn{position:fixed;bottom:30px;right:24px;z-index:100;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);color:var(--gold);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:0;pointer-events:none}
+#nextBtn:hover{background:rgba(255,215,0,.15);transform:scale(1.1)}
+#nextBtn.show{opacity:1;pointer-events:auto}
 
 /* Dots */
 .nav-dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity .6s}
@@ -118,6 +118,9 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
 
 /* Decos flotantes */
 .deco{position:absolute;pointer-events:none;opacity:.6;font-size:20px}
+
+/* Click Sparkles */
+.click-sparkle{position:fixed;pointer-events:none;z-index:9999;color:var(--gold);font-weight:bold}
 </style>
 </head>
 <body>
@@ -156,7 +159,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:30%;right:10%;color:var(--coral)">❋</span>
       <div class="sec-c">
         <p class="rv u" style="font-size:.85rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold)">✦ Estás invitado ✦</p>
-        <h1 class="rv u tg" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">Mónica</h1>
+        <h1 class="rv u tg float-title" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">Mónica</h1>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1rem,3vw,1.3rem);color:var(--lav)">Celebra conmigo un día más de vida</p>
       </div>
@@ -168,7 +171,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:25%;right:12%;color:var(--pink)">✦</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(196,113,237,.2),rgba(255,107,157,.2));color:var(--pink)"><i class="fa-solid fa-heart"></i></div>
-        <h2 class="stit rv u tg">Con todo nuestro amor</h2>
+        <h2 class="stit rv u tg float-title">Con todo nuestro amor</h2>
         <p class="ssub rv u">Tenemos el honor de invitarte a celebrar</p>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.15rem;color:var(--lav);margin-bottom:24px">la vida de nuestra querida hija</p>
@@ -189,7 +192,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:22%;right:18%;color:var(--coral)">✦</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,138,128,.2));color:var(--gold)"><i class="fa-solid fa-calendar-days"></i></div>
-        <h2 class="stit rv u tg">Fecha y Hora</h2>
+        <h2 class="stit rv u tg float-title">Fecha y Hora</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:700;color:#fff">15 de Junio, 2025</p>
         <p class="rv u" style="font-size:1.1rem;color:var(--gold);font-weight:600;margin-top:4px">8:00 P.M.</p>
@@ -210,7 +213,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:18%;right:12%;color:var(--gold)">✦</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(100,255,218,.15),rgba(0,191,165,.15));color:var(--teal)"><i class="fa-solid fa-location-dot"></i></div>
-        <h2 class="stit rv u tg">Ubicación</h2>
+        <h2 class="stit rv u tg float-title">Ubicación</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff">Salón en Villa Hermosa</p>
         <p class="rv u" style="font-size:.95rem;color:var(--lav)">Zona 7, San Miguel Petapa</p>
@@ -225,7 +228,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:20%;left:12%;color:var(--gold)">✦</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(255,107,157,.2),rgba(255,215,0,.15));color:var(--pink)"><i class="fa-solid fa-shirt"></i></div>
-        <h2 class="stit rv u tg">Vestimenta</h2>
+        <h2 class="stit rv u tg float-title">Vestimenta</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff">Formal</p>
         <p class="rv u" style="font-size:.9rem;color:var(--lav);max-width:400px;margin:0 auto;line-height:1.7">Nos encantaría verte elegante, pero lo más importante es que vengas y la pases increíble. ¡Si no llegás con ropa formal, no te preocupes, lo entendemos!</p>
@@ -242,10 +245,10 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:25%;right:10%;color:var(--gold)">❋</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(240,165,0,.15));color:var(--gold)"><i class="fa-solid fa-gift"></i></div>
-        <h2 class="stit rv u tg">Regalos</h2>
+        <h2 class="stit rv u tg float-title">Regalos</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-size:.9rem;color:var(--lav);line-height:1.7;max-width:400px;margin:0 auto">Tu presencia es el mejor regalo. Pero si deseás tener un detalle conmigo, un billete de <strong style="color:var(--gold)">Q100 quetzales</strong> es más que suficiente.</p>
-        <div class="rv s" style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:50px;padding:12px 24px">
+        <div class="rv s float-title" style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:50px;padding:12px 24px">
           <i class="fa-solid fa-money-bill-wave" style="color:var(--gold);font-size:1.1rem"></i>
           <span style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold)">Q100</span>
         </div>
@@ -258,7 +261,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:15%;left:15%;color:var(--pink)">❀</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(255,138,128,.2),rgba(255,107,157,.15));color:var(--coral)"><i class="fa-solid fa-gamepad"></i></div>
-        <h2 class="stit rv u tg">Actividades</h2>
+        <h2 class="stit rv u tg float-title">Actividades</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-size:.9rem;color:var(--lav);margin-bottom:16px">Prepárate para una noche llena de diversión</p>
         <div class="rv s" style="display:flex;flex-direction:column;gap:10px;max-width:380px;margin:0 auto">
@@ -275,7 +278,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:20%;right:15%;color:var(--teal)">✦</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(37,211,102,.2),rgba(18,140,126,.15));color:#25d366"><i class="fa-solid fa-circle-check"></i></div>
-        <h2 class="stit rv u tg">Confirmá tu asistencia</h2>
+        <h2 class="stit rv u tg float-title">Confirmá tu asistencia</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-size:.9rem;color:var(--lav);line-height:1.7">No nos gustaría que te quedes fuera. ¡Confirmá que vas a estar presente!</p>
         <a href="https://wa.me/50258965767?text=Estoy%20agradecido%20de%20ser%20invitado%20al%20cumplea%C3%B1os%20de%20M%C3%B3nica%2C%20ah%C3%AD%20estar%C3%A9" target="_blank" rel="noopener" class="btn btn-green rv s" style="margin-top:8px"><i class="fa-brands fa-whatsapp"></i> Confirmar asistencia</a>
@@ -288,7 +291,7 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:22%;left:12%;color:var(--pink)">❀</span>
       <div class="sec-c">
         <div class="icirc rv s" style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,107,157,.12));color:var(--gold)"><i class="fa-solid fa-bookmark"></i></div>
-        <h2 class="stit rv u tg">Tu recuerdo</h2>
+        <h2 class="stit rv u tg float-title">Tu recuerdo</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-size:.85rem;color:var(--lav);margin-bottom:16px">Escribí tu nombre y descargá un recuerdo de esta invitación</p>
         <div class="souvenir-card rv s">
@@ -311,20 +314,22 @@ body{font-family:'Poppins',sans-serif;background:var(--deep);color:#fff;overflow
       <span class="deco" style="bottom:15%;right:15%;color:var(--coral)">❋</span>
       <div class="sec-c">
         <p class="rv s" style="font-size:3rem;margin-bottom:10px">🎉</p>
-        <h2 class="rv u tg" style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:900">¡Nos vemos ahí!</h2>
+        <h2 class="rv u tg float-title" style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:900">¡Nos vemos ahí!</h2>
         <div class="divd rv s"></div>
         <p class="rv u" style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--lav);line-height:1.7;max-width:420px;margin:0 auto">Este día no sería lo mismo sin vos. Gracias por ser parte de mi vida y por acompañarme a celebrar un año más.</p>
         <p class="rv u" style="margin-top:24px;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold)">Con cariño, Mónica</p>
         <div class="rv s" style="display:flex;justify-content:center;gap:8px;margin-top:24px;font-size:.85rem"><span style="color:var(--pink)">❤</span><span style="color:var(--gold)">✦</span><span style="color:var(--lav)">❤</span></div>
+        
+        <!-- BOTÓN COMENZAR DE NUEVO -->
+        <button class="btn btn-outline rv u" style="margin-top:40px" onclick="resetInvitation()"><i class="fa-solid fa-rotate-left"></i> Comenzar de nuevo</button>
       </div>
     </section>
 
   </div><!-- /slider -->
 </div><!-- /app -->
 
-<!-- NAV BUTTONS -->
-<button id="prevBtn" class="nav-btn"><i class="fa-solid fa-chevron-up"></i></button>
-<button id="nextBtn" class="nav-btn"><i class="fa-solid fa-chevron-down"></i></button>
+<!-- NAV BUTTON (Solo abajo) -->
+<button id="nextBtn"><i class="fa-solid fa-chevron-down"></i></button>
 
 <!-- NAV DOTS -->
 <nav class="nav-dots" id="navDots">
@@ -351,13 +356,13 @@ const app = document.getElementById('app');
 const slider = document.getElementById('slider');
 const navDotsEl = document.getElementById('navDots');
 const dots = document.querySelectorAll('.ndot');
-const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const sections = document.querySelectorAll('.sec');
 const totalSections = sections.length;
 let currentSection = 0;
 let isAnimating = false;
 let envelopeOpened = false;
+let hintTimer;
 
 /* ========================================
    PARTÍCULAS DE FONDO (CANVAS)
@@ -365,64 +370,34 @@ let envelopeOpened = false;
 const bgCanvas = document.getElementById('bg-canvas');
 const bgCtx = bgCanvas.getContext('2d');
 let particles = [];
-let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-function resizeBgCanvas() {
-  bgCanvas.width = window.innerWidth;
-  bgCanvas.height = window.innerHeight;
-}
-resizeBgCanvas();
-window.addEventListener('resize', resizeBgCanvas);
-
-document.addEventListener('mousemove', (e) => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
+function resizeBgCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+resizeBgCanvas(); window.addEventListener('resize', resizeBgCanvas);
 
 class Particle {
-  constructor() {
-    this.reset();
-  }
+  constructor() { this.reset(); }
   reset() {
-    this.x = Math.random() * bgCanvas.width;
-    this.y = Math.random() * bgCanvas.height;
+    this.x = Math.random() * bgCanvas.width; this.y = Math.random() * bgCanvas.height;
     this.size = Math.random() * 2 + 0.5;
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3; this.speedY = (Math.random() - 0.5) * 0.3;
     this.color = ['#ffd700', '#ff6b9d', '#e8d5f5', '#64ffda'][Math.floor(Math.random() * 4)];
   }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x < 0 || this.x > bgCanvas.width || this.y < 0 || this.y > bgCanvas.height) this.reset();
-  }
-  draw() {
-    bgCtx.beginPath();
-    bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    bgCtx.fillStyle = this.color;
-    bgCtx.fill();
-  }
+  update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > bgCanvas.width || this.y < 0 || this.y > bgCanvas.height) this.reset(); }
+  draw() { bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); bgCtx.fillStyle = this.color; bgCtx.fill(); }
 }
-
 for (let i = 0; i < 80; i++) particles.push(new Particle());
 
 function animateParticles() {
   bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
   particles.forEach(p => { p.update(); p.draw(); });
-  
-  // Conectar partículas cercanas
   for (let a = 0; a < particles.length; a++) {
     for (let b = a + 1; b < particles.length; b++) {
-      const dx = particles[a].x - particles[b].x;
-      const dy = particles[a].y - particles[b].y;
+      const dx = particles[a].x - particles[b].x; const dy = particles[a].y - particles[b].y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < 100) {
-        bgCtx.beginPath();
-        bgCtx.strokeStyle = `rgba(255, 215, 0, ${0.05 * (1 - dist / 100)})`;
-        bgCtx.lineWidth = 0.5;
-        bgCtx.moveTo(particles[a].x, particles[a].y);
-        bgCtx.lineTo(particles[b].x, particles[b].y);
-        bgCtx.stroke();
+        bgCtx.beginPath(); bgCtx.strokeStyle = `rgba(255, 215, 0, ${0.05 * (1 - dist / 100)})`;
+        bgCtx.lineWidth = 0.5; bgCtx.moveTo(particles[a].x, particles[a].y);
+        bgCtx.lineTo(particles[b].x, particles[b].y); bgCtx.stroke();
       }
     }
   }
@@ -431,39 +406,64 @@ function animateParticles() {
 animateParticles();
 
 /* ========================================
-   ENVELOPE
+   EFECTO INTERACTIVO AL TOCAR/CLIC
    ======================================== */
-// Estrellas overlay
+document.addEventListener('click', (e) => {
+  // No crear chispas si se toca un botón o enlace
+  if (e.target.closest('button, a, input')) return;
+  
+  const emojis = ['✦', '❤', '✨', '🌟', '💫', '✦'];
+  for (let i = 0; i < 6; i++) {
+    const spark = document.createElement('span');
+    spark.className = 'click-sparkle';
+    spark.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    spark.style.left = e.clientX + 'px';
+    spark.style.top = e.clientY + 'px';
+    spark.style.fontSize = (14 + Math.random() * 16) + 'px';
+    document.body.appendChild(spark);
+
+    gsap.to(spark, {
+      x: (Math.random() - 0.5) * 140,
+      y: (Math.random() - 0.5) * 140 - 40,
+      opacity: 0,
+      scale: Math.random() * 1.5 + 0.5,
+      rotation: (Math.random() - 0.5) * 90,
+      duration: 0.8 + Math.random() * 0.4,
+      ease: "power2.out",
+      onComplete: () => spark.remove()
+    });
+  }
+});
+
+/* ========================================
+   ENVELOPE LOGIC
+   ======================================== */
 const colors = ['#ffd700', '#ff6b9d', '#e8d5f5', '#ffffff'];
 for (let i = 0; i < 60; i++) {
-  const s = document.createElement('div');
-  s.className = 'o-star';
+  const s = document.createElement('div'); s.className = 'o-star';
   s.style.cssText = `width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%4]};animation:twk ${2+Math.random()*4}s ease-in-out infinite alternate;animation-delay:${Math.random()*5}s`;
   overlay.appendChild(s);
 }
 
-const hintTimer = setTimeout(() => { if (!envelopeOpened) hint.classList.add('vis'); }, 5000);
+function startHintTimer() {
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => { if (!envelopeOpened) hint.classList.add('vis'); }, 5000);
+}
+startHintTimer();
 
 function openEnvelope() {
   if (envelopeOpened) return;
-  envelopeOpened = true;
-  clearTimeout(hintTimer);
-  hint.classList.remove('vis');
+  envelopeOpened = true; clearTimeout(hintTimer); hint.classList.remove('vis');
   envelope.classList.add('opening');
   
   setTimeout(launchConfetti, 600);
   
   setTimeout(() => {
-    overlay.classList.add('hide');
-    app.style.opacity = '1';
-    navDotsEl.classList.add('vis');
-    prevBtn.classList.add('show');
-    nextBtn.classList.add('show');
-    initGSAP();
-    animateSectionIn(0);
+    gsap.to(overlay, { opacity: 0, duration: 1, pointerEvents: 'none' });
+    gsap.to(app, { opacity: 1, duration: 0.8 });
+    navDotsEl.classList.add('vis'); nextBtn.classList.add('show');
+    initGSAP(); animateSectionIn(0);
   }, 1600);
-  
-  setTimeout(() => { overlay.style.display = 'none'; }, 3000);
 }
 
 /* ========================================
@@ -471,9 +471,7 @@ function openEnvelope() {
    ======================================== */
 const confCanvas = document.getElementById('confetti-canvas');
 const confCtx = confCanvas.getContext('2d');
-confCanvas.width = window.innerWidth;
-confCanvas.height = window.innerHeight;
-
+confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight;
 const confParts = [];
 const confColors = ['#ff6b9d', '#ffd700', '#ff8a80', '#e8d5f5', '#64ffda', '#ffffff', '#c471ed'];
 
@@ -483,13 +481,11 @@ function launchConfetti() {
   }
   animConf();
 }
-
 function animConf() {
   confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
   let alive = false;
   confParts.forEach(p => {
-    if (p.opacity <= 0) return;
-    alive = true;
+    if (p.opacity <= 0) return; alive = true;
     p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.99; p.rot += p.rv;
     if (p.y > confCanvas.height + 20) { p.opacity = 0; return; }
     if (p.y > confCanvas.height * 0.7) p.opacity -= 0.02;
@@ -505,8 +501,7 @@ function animConf() {
    ======================================== */
 const targetDate = new Date('2025-06-15T20:00:00-06:00').getTime();
 function updateCountdown() {
-  const now = new Date().getTime();
-  let diff = targetDate - now;
+  const now = new Date().getTime(); let diff = targetDate - now;
   if (diff <= 0) { ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '🎉'); return; }
   const d = Math.floor(diff / (1000*60*60*24)); diff -= d*1000*60*60*24;
   const h = Math.floor(diff / (1000*60*60)); diff -= h*1000*60*60;
@@ -520,25 +515,27 @@ function updateCountdown() {
 updateCountdown(); setInterval(updateCountdown, 1000);
 
 /* ========================================
-   GSAP ANIMATIONS
+   GSAP PREMIUM ANIMATIONS
    ======================================== */
 function initGSAP() {
-  // Set initial states
+  // Estado inicial oculto
   gsap.set('.rv', { autoAlpha: 0 });
-  gsap.set('.rv.u', { y: 60 });
-  gsap.set('.rv.s', { scale: 0.7 });
-  
-  // Floating decorations
+  gsap.set('.rv.u', { y: 60, scale: 0.9 });
+  gsap.set('.rv.s', { scale: 0.4, rotation: -10 });
+
+  // Animación continua de elementos flotantes
   gsap.utils.toArray('.deco').forEach(d => {
     gsap.to(d, {
-      y: gsap.utils.random(-25, 25),
-      x: gsap.utils.random(-15, 15),
-      rotation: gsap.utils.random(-15, 15),
-      duration: gsap.utils.random(3, 6),
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      delay: Math.random() * 2
+      y: gsap.utils.random(-30, 30), x: gsap.utils.random(-20, 20),
+      rotation: gsap.utils.random(-20, 20), duration: gsap.utils.random(3, 6),
+      ease: "sine.inOut", yoyo: true, repeat: -1, delay: Math.random() * 2
+    });
+  });
+
+  // Animación continua de títulos
+  gsap.utils.toArray('.float-title').forEach(t => {
+    gsap.to(t, {
+      y: "-=12", duration: 2.5, ease: "sine.inOut", yoyo: true, repeat: -1, delay: Math.random() * 1
     });
   });
 }
@@ -549,47 +546,33 @@ function animateSectionIn(index) {
   const scales = sec.querySelectorAll('.rv.s');
   
   const tl = gsap.timeline();
-  
   tl.to(ups, {
-    autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power3.out"
+    autoAlpha: 1, y: 0, scale: 1, rotation: 0, duration: 1, stagger: 0.12, ease: "elastic.out(1, 0.6)"
   })
   .to(scales, {
-    autoAlpha: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.7)"
-  }, "-=0.7");
+    autoAlpha: 1, scale: 1, rotation: 0, duration: 0.9, stagger: 0.08, ease: "back.out(1.7)"
+  }, "-=0.8");
 }
 
-function animateSectionOut(index, direction) {
+function animateSectionOut(index) {
   const sec = sections[index];
   const allRv = sec.querySelectorAll('.rv');
-  
   return gsap.to(allRv, {
-    autoAlpha: 0,
-    y: direction === 'down' ? -40 : 40,
-    scale: 0.9,
-    duration: 0.4,
-    stagger: 0.03,
-    ease: "power2.in"
+    autoAlpha: 0, y: -40, scale: 0.8, duration: 0.4, stagger: 0.03, ease: "power2.in"
   });
 }
 
 /* ========================================
-   SLIDER NAVIGATION
+   SLIDER NAVIGATION (SOLO HACIA ABAJO)
    ======================================== */
-function goToSection(idx, force = false) {
-  if (isAnimating || (idx === currentSection && !force)) return;
-  if (idx < 0 || idx >= totalSections) return;
-  
+function goToSection(idx) {
+  if (isAnimating || idx <= currentSection || idx >= totalSections) return;
   isAnimating = true;
-  const direction = idx > currentSection ? 'down' : 'up';
   
-  // Animate out current
-  if (!force) animateSectionOut(currentSection, direction);
+  animateSectionOut(currentSection);
   
-  // Move slider
   gsap.to(slider, {
-    y: `-${idx * 100}vh`,
-    duration: 1,
-    ease: "power3.inOut",
+    y: `-${idx * 100}vh`, duration: 1, ease: "power3.inOut",
     onComplete: () => {
       currentSection = idx;
       animateSectionIn(currentSection);
@@ -597,44 +580,77 @@ function goToSection(idx, force = false) {
       setTimeout(() => { isAnimating = false; }, 200);
     }
   });
-  
-  // Animate out immediately if forced
-  if (force) {
-    gsap.set(sections[currentSection].querySelectorAll('.rv'), { autoAlpha: 0, y: 60, scale: 0.7 });
-  }
 }
 
 function updateNav() {
   dots.forEach((d, i) => d.classList.toggle('act', i === currentSection));
-  prevBtn.style.opacity = currentSection === 0 ? '0.3' : '1';
-  nextBtn.style.opacity = currentSection === totalSections - 1 ? '0.3' : '1';
+  // Ocultar botón abajo en la última sección
+  if (currentSection >= totalSections - 1) {
+    gsap.to(nextBtn, { autoAlpha: 0, scale: 0.5, duration: 0.3 });
+  } else {
+    gsap.to(nextBtn, { autoAlpha: 1, scale: 1, duration: 0.3 });
+  }
 }
 
-// Button Listeners
 nextBtn.addEventListener('click', () => goToSection(currentSection + 1));
-prevBtn.addEventListener('click', () => goToSection(currentSection - 1));
 
-// Dot Listeners
-dots.forEach(d => d.addEventListener('click', () => goToSection(parseInt(d.dataset.i))));
+// Los puntos de navegación permiten saltar hacia adelante
+dots.forEach(d => d.addEventListener('click', () => {
+  const targetIdx = parseInt(d.dataset.i);
+  if (targetIdx > currentSection) goToSection(targetIdx);
+}));
 
-// Keyboard Navigation
+// Teclado e Interacción Táctil
 document.addEventListener('keydown', (e) => {
   if (!envelopeOpened) return;
   if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToSection(currentSection + 1); }
-  if (e.key === 'ArrowUp') { e.preventDefault(); goToSection(currentSection - 1); }
 });
 
-// Touch support for mobile swipe
 let touchStartY = 0;
 document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
 document.addEventListener('touchend', (e) => {
   if (!envelopeOpened) return;
   const diff = touchStartY - e.changedTouches[0].clientY;
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) goToSection(currentSection + 1); // Swiped up
-    else goToSection(currentSection - 1); // Swiped down
-  }
+  if (diff > 50) goToSection(currentSection + 1); // Swiped up (avanzar)
 });
+
+/* ========================================
+   REINICIAR INVITACIÓN
+   ======================================== */
+function resetInvitation() {
+  isAnimating = true;
+  
+  // Animar salida de la última sección
+  gsap.to(sections[currentSection].querySelectorAll('.rv'), {
+    autoAlpha: 0, y: -50, scale: 0.8, duration: 0.5, ease: "power2.in"
+  });
+
+  // Mover slider hacia arriba de vuelta al inicio
+  gsap.to(slider, {
+    y: '0vh', duration: 1.5, ease: "power3.inOut", delay: 0.3,
+    onComplete: () => {
+      currentSection = 0;
+      envelopeOpened = false;
+      
+      // Resetear sobre
+      envelope.classList.remove('opening');
+      hint.classList.remove('vis');
+      
+      // Mostrar overlay y ocultar app
+      gsap.to(overlay, { opacity: 1, duration: 1, pointerEvents: 'auto' });
+      gsap.to(app, { opacity: 0, duration: 0.5 });
+      gsap.to(nextBtn, { autoAlpha: 0, duration: 0.3 });
+      navDotsEl.classList.remove('vis');
+      
+      // Resetear estados de GSAP internos para la próxima vez
+      gsap.set('.rv', { autoAlpha: 0, y: 60, scale: 0.9, rotation: -10 });
+      
+      updateNav();
+      startHintTimer();
+      isAnimating = false;
+    }
+  });
+}
 
 /* ========================================
    SOUVENIR DOWNLOAD
@@ -645,36 +661,26 @@ function downloadSouvenir() {
   canvas.width = 1080; canvas.height = 1440;
   const c = canvas.getContext('2d');
   
-  // Background
   const bg = c.createLinearGradient(0, 0, canvas.width, canvas.height);
   bg.addColorStop(0, '#0a0118'); bg.addColorStop(0.5, '#1a0a2e'); bg.addColorStop(1, '#0a0118');
   c.fillStyle = bg; c.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Glow
   const glow = c.createRadialGradient(540, 500, 50, 540, 500, 400);
   glow.addColorStop(0, 'rgba(255,107,157,0.08)'); glow.addColorStop(1, 'transparent');
   c.fillStyle = glow; c.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Border
   c.strokeStyle = 'rgba(255,215,0,0.3)'; c.lineWidth = 2; c.strokeRect(50, 50, canvas.width-100, canvas.height-100);
-  
-  // Corners
   c.strokeStyle = 'rgba(255,215,0,0.6)'; c.lineWidth = 3;
   [[50,50,1,1],[980,50,-1,1],[50,1390,1,-1],[980,1390,-1,-1]].forEach(([x,y,dx,dy]) => {
     c.beginPath(); c.moveTo(x, y+dy*30); c.lineTo(x, y); c.lineTo(x+dx*30, y); c.stroke();
   });
   
-  // Title
   c.textAlign = 'center'; c.font = '600 22px Poppins, sans-serif'; c.fillStyle = '#ffd700';
   c.fillText('✦ INVITACIÓN ESPECIAL ✦', 540, 220);
-  
-  // Line
   c.beginPath(); c.moveTo(390, 250); c.lineTo(690, 250); c.strokeStyle = 'rgba(255,215,0,0.4)'; c.lineWidth = 1; c.stroke();
   
-  // Para:
   c.font = '300 28px Poppins, sans-serif'; c.fillStyle = '#e8d5f5'; c.fillText('Para:', 540, 340);
   
-  // Name
   let nameSize = 72;
   c.font = `900 ${nameSize}px "Playfair Display", serif`;
   while (c.measureText(name).width > canvas.width - 160 && nameSize > 30) { nameSize -= 4; c.font = `900 ${nameSize}px "Playfair Display", serif`; }
@@ -682,36 +688,27 @@ function downloadSouvenir() {
   nameGrad.addColorStop(0, '#ff6b9d'); nameGrad.addColorStop(0.5, '#ffd700'); nameGrad.addColorStop(1, '#ff6b9d');
   c.fillStyle = nameGrad; c.fillText(name, 540, 430);
   
-  // Cumpleañera
   c.font = '300 24px Poppins, sans-serif'; c.fillStyle = '#e8d5f5'; c.fillText('del cumpleaños de', 540, 510);
   c.font = '900 80px "Playfair Display", serif';
   const monGrad = c.createLinearGradient(340, 530, 740, 620);
   monGrad.addColorStop(0, '#ff6b9d'); monGrad.addColorStop(0.5, '#ffd700'); monGrad.addColorStop(1, '#ff6b9d');
   c.fillStyle = monGrad; c.fillText('Mónica', 540, 610);
   
-  // Details
   c.font = '500 32px Poppins, sans-serif'; c.fillStyle = '#ffffff'; c.fillText('15 de Junio, 2025', 540, 730);
   c.font = '600 36px Poppins, sans-serif'; c.fillStyle = '#ffd700'; c.fillText('8:00 P.M.', 540, 785);
   c.font = '300 24px Poppins, sans-serif'; c.fillStyle = 'rgba(255,255,255,0.5)'; c.fillText('Hora de Guatemala', 540, 820);
   
-  // Separator
   c.beginPath(); c.moveTo(440, 860); c.lineTo(640, 860); c.strokeStyle = 'rgba(255,215,0,0.3)'; c.stroke();
   
-  // Location
   c.font = '500 26px Poppins, sans-serif'; c.fillStyle = '#64ffda'; c.fillText('📍 Villa Hermosa, Zona 7', 540, 920);
   c.font = '300 22px Poppins, sans-serif'; c.fillStyle = '#e8d5f5'; c.fillText('San Miguel Petapa', 540, 955);
   
-  // Dress & Hosts
   c.font = '300 22px Poppins, sans-serif'; c.fillStyle = 'rgba(255,255,255,0.6)'; c.fillText('Vestimenta: Formal', 540, 1030);
   c.font = '300 20px Poppins, sans-serif'; c.fillStyle = 'rgba(255,255,255,0.4)'; c.fillText('Invitan: Isabel & Emilio', 540, 1080);
   
-  // Hearts
   c.font = '28px serif'; c.fillStyle = '#ff6b9d'; c.fillText('❤  ✦  ❤', 540, 1160);
-  
-  // Footer
   c.font = '300 18px Poppins, sans-serif'; c.fillStyle = 'rgba(255,255,255,0.25)'; c.fillText('Con cariño, Mónica', 540, 1250);
   
-  // Download
   const link = document.createElement('a');
   link.download = 'invitacion-monica.png'; link.href = canvas.toDataURL('image/png'); link.click();
 }
