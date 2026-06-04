@@ -12,13 +12,13 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --deep: #e91e63;       /* Rosa Fuerte */
-  --sec: #ffffff;        /* Blanco Impecable */
-  --pink-accent: #ff4081;/* Rosa Acento */
-  --dark-berry: #4a0e2e; /* Borgoña de alta elegancia */
-  --gold: #d4af37;       /* Dorado mate de alta legibilidad */
+  --deep: #e91e63;
+  --sec: #ffffff;
+  --pink-accent: #ff4081;
+  --dark-berry: #4a0e2e;
+  --gold: #d4af37;
   --coral: #ff8a80;
-  --lav: #ffeef2;        /* Rosa pastel súper suave */
+  --lav: #ffeef2;
   --teal: #00bfa5;
 }
 body{
@@ -45,10 +45,10 @@ body{
   transition:opacity 1.2s ease;
 }
 #overlay.hide{opacity:0;pointer-events:none}
-.o-star{position:absolute;border-radius:50%;pointer-events:none;opacity:.5}
+.o-star{position:absolute;border-radius:50%;pointer-events:none;opacity:.5; will-change: transform, opacity;}
 
 .env-wrap{perspective:1200px;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent}
-.env{position:relative;width:280px;height:200px;animation:shk .5s ease-in-out infinite alternate;transform-style:preserve-3d}
+.env{position:relative;width:280px;height:200px;animation:shk .5s ease-in-out infinite alternate;transform-style:preserve-3d; will-change: transform;}
 .env:hover{transform:scale(1.06)}
 .env.opening{animation:none}
 @keyframes shk{0%{transform:rotate(-3deg) translateY(-2px)}100%{transform:rotate(3deg) translateY(-2px)}}
@@ -98,6 +98,7 @@ body{
   transition:transform .9s cubic-bezier(.4,0,.2,1);
   z-index:4;
   backface-visibility:hidden;
+  will-change: transform;
 }
 .env.opening .env-flap{transform:rotateX(-180deg)}
 .env-seal{
@@ -116,6 +117,7 @@ body{
   align-items:center;
   justify-content:center;
   animation:pseal 2s ease-in-out infinite;
+  will-change: transform, opacity, box-shadow;
 }
 @keyframes pseal{0%,100%{box-shadow:0 0 20px rgba(255,215,0,.3)}50%{box-shadow:0 0 40px rgba(255,215,0,.6)}}
 .env-seal::after{content:'❤';color:rgba(255,255,255,.95);font-size:20px}
@@ -135,6 +137,7 @@ body{
   align-items:center;
   justify-content:center;
   box-shadow:0 2px 12px rgba(0,0,0,.08);
+  will-change: transform;
 }
 .env-letter .ln{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#e91e63}
 .env-letter .ls{font-size:10px;color:#880e4f;margin-top:4px;letter-spacing:2px;text-transform:uppercase}
@@ -148,7 +151,6 @@ body{
 #app{position:relative;height:100vh;width:100vw;overflow:hidden;z-index:1;opacity:0}
 #slider{height:800vh;width:100vw;position:relative;will-change:transform}
 
-/* Aumentamos el padding-right de las secciones para dar un margen más grueso ante los puntitos */
 .sec{
   height:100vh;
   width:100vw;
@@ -157,9 +159,8 @@ body{
   justify-content:center;
   position:relative;
   overflow:hidden;
-  padding:30px 40px 30px 40px; /* Acolchado amplio a la derecha para no chocar con navegación */
+  padding:40px 40px 40px 40px; 
 }
-/* Reducimos ligeramente el max-width del contenido para compactar y proteger de colisiones laterales */
 .sec-c{
   position:relative;
   z-index:2;
@@ -170,115 +171,53 @@ body{
 }
 
 @media(max-width: 640px) {
-  .sec {
-    padding: 30px 40px 30px 40px; /* Ajuste adaptado en móviles manteniendo la protección derecha */
-  }
+  .sec { padding: 30px 40px 30px 40px; }
 }
 
-/* S0: Degradado radial con aura luminosa central */
-#s0 {
-  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fff2f5 55%, #ffd3e0 100%);
-}
-/* S1: Rayas verticales finas */
-#s1 {
-  background-color: #ffffff;
-  background-image: repeating-linear-gradient(90deg, rgba(233,30,99,0.015) 0px, rgba(233,30,99,0.015) 2px, transparent 2px, transparent 12px),
-                    linear-gradient(135deg, #ffffff 0%, #fff2f5 100%);
-}
-/* S2: Románticos lunares finos */
-#s2 {
-  background-color: #ffffff;
-  background-image: radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%),
-                    radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%),
-                    linear-gradient(to bottom, #ffffff 0%, #ffeef2 100%);
-  background-size: 24px 24px, 24px 24px, 100% 100%;
-  background-position: 0 0, 12px 12px, 0 0;
-}
-/* S3: Cuadrícula moderna en tono rosa tierno */
-#s3 {
-  background-color: #ffffff;
-  background-image: linear-gradient(0deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px),
-                    linear-gradient(to bottom, #ffffff, #fff5f7);
-  background-size: 28px 28px;
-}
-/* S4: Resplandor radial asimétrico */
-#s4 {
-  background: radial-gradient(circle at 15% 15%, #ffffff 0%, #fff1f4 50%, #ffd0dd 100%);
-}
-/* S5: Líneas diagonales sumamente tenues */
-#s5 {
-  background-color: #ffffff;
-  background-image: repeating-linear-gradient(45deg, rgba(233,30,99,0.012) 0px, rgba(233,30,99,0.012) 2px, transparent 2px, transparent 16px),
-                    linear-gradient(180deg, #ffffff 0%, #ffebf1 100%);
-}
-/* S6: Textura geométrica sofisticada de rombos cruzados */
-#s6 {
-  background-color: #ffffff;
-  background-image: linear-gradient(135deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%),
-                    linear-gradient(225deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%),
-                    linear-gradient(45deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%),
-                    linear-gradient(315deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%),
-                    linear-gradient(to right, #ffffff, #ffeef2);
-  background-position: 15px 0, 15px 0, 0 0, 0 0;
-  background-size: 30px 30px;
-  background-repeat: repeat;
-}
-/* S7: Desvanecimiento de color rosa a blanco desde la base */
-#s7 {
-  background: radial-gradient(circle at 50% 110%, #ffccd8 0%, #fff0f5 55%, #ffffff 100%);
-}
+#s0 { background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fff2f5 55%, #ffd3e0 100%); }
+#s1 { background-color: #ffffff; background-image: repeating-linear-gradient(90deg, rgba(233,30,99,0.015) 0px, rgba(233,30,99,0.015) 2px, transparent 2px, transparent 12px), linear-gradient(135deg, #ffffff 0%, #fff2f5 100%); }
+#s2 { background-color: #ffffff; background-image: radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%), radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%), linear-gradient(to bottom, #ffffff 0%, #ffeef2 100%); background-size: 24px 24px, 24px 24px, 100% 100%; background-position: 0 0, 12px 12px, 0 0; }
+#s3 { background-color: #ffffff; background-image: linear-gradient(0deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px), linear-gradient(to bottom, #ffffff, #fff5f7); background-size: 28px 28px; }
+#s4 { background: radial-gradient(circle at 15% 15%, #ffffff 0%, #fff1f4 50%, #ffd0dd 100%); }
+#s5 { background-color: #ffffff; background-image: repeating-linear-gradient(45deg, rgba(233,30,99,0.012) 0px, rgba(233,30,99,0.012) 2px, transparent 2px, transparent 16px), linear-gradient(180deg, #ffffff 0%, #ffebf1 100%); }
+#s6 { background-color: #ffffff; background-image: linear-gradient(135deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(225deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(45deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(315deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(to right, #ffffff, #ffeef2); background-position: 15px 0, 15px 0, 0 0, 0 0; background-size: 30px 30px; background-repeat: repeat; }
+#s7 { background: radial-gradient(circle at 50% 110%, #ffccd8 0%, #fff0f5 55%, #ffffff 100%); }
 
-/* GRADIENTE DE TEXTO EXCLUSIVO ROSA-BERRY */
-.tg{
-  background: linear-gradient(135deg, var(--deep), var(--dark-berry), var(--deep));
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+.tg{ background: linear-gradient(135deg, var(--deep), var(--dark-berry), var(--deep)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
 .stit{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.6rem,5vw,2.3rem);margin-bottom:6px;color:var(--dark-berry)}
 .ssub{font-weight:300;font-size:clamp(.82rem,2.2vw,1rem);color:var(--dark-berry);opacity:0.85;margin-bottom:24px}
 .divd{width:55px;height:2px;background:linear-gradient(90deg,transparent,var(--deep),transparent);margin:16px auto}
 .icirc{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.3rem;background:linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05))}
 
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;border:none;transition:all .3s;text-decoration:none;color:#fff}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(233,30,99,0.25)}
 .btn:active{transform:scale(0.95)}
 .btn-gold{background:linear-gradient(135deg,#ffd700,#ffb300);color:#3c071e}
-.btn-gold:hover{box-shadow:0 8px 30px rgba(255,215,0,.4)}
 .btn-green{background:linear-gradient(135deg,#25d366,#128c7e); color: #fff}
-.btn-green:hover{box-shadow:0 8px 30px rgba(37,211,102,.3)}
 .btn-pink{background:linear-gradient(135deg,#ff4081,#e91e63);color:#fff}
-.btn-pink:hover{box-shadow:0 8px 30px rgba(233,30,99,.3)}
 .btn-outline-pink{background:transparent;border:2px solid #e91e63;color:#e91e63}
-.btn-outline-pink:hover{background:rgba(233,30,99,0.05)}
 
 .hcard{
-  background:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.9); 
   border:1px solid rgba(233,30,99,0.12);
   border-radius:16px;
   padding:20px;
-  backdrop-filter:blur(8px);
   color: var(--dark-berry);
 }
 
 .cd-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
 .cd-b{
-  background:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.95);
   border:1px solid rgba(233,30,99,0.15);
   border-radius:14px;
   padding:14px 4px;
-  backdrop-filter:blur(6px);
 }
 .cd-n{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900;color:var(--deep);line-height:1}
 .cd-l{font-size:.65rem;color:var(--dark-berry);opacity:0.8;text-transform:uppercase;letter-spacing:2px;margin-top:4px}
 
-/* SOUVENIR TICKET */
 .souvenir-card{
-  background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.4));
+  background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
   border:2px solid rgba(233,30,99,0.18);
   border-radius:20px;
   padding:28px 24px;
@@ -298,8 +237,6 @@ body{
   outline:none;
   transition:border-color .3s;
 }
-.souvenir-input:focus{border-color:var(--deep)}
-.souvenir-input::placeholder{color:rgba(74,14,46,.45);font-family:'Poppins',sans-serif;font-size:.85rem}
 
 #nextBtn{
   position:fixed;
@@ -322,7 +259,6 @@ body{
   opacity:0;
   pointer-events:none;
 }
-#nextBtn:hover{background:#ff4081;transform:scale(1.1);box-shadow:0 6px 20px rgba(233,30,99,0.5)}
 #nextBtn.show{opacity:1;pointer-events:auto}
 
 #scrollHint {
@@ -344,31 +280,13 @@ body{
   text-align: center;
   white-space: nowrap;
 }
-#scrollHint::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  right: 20px;
-  border-width: 6px 6px 0;
-  border-style: solid;
-  border-color: var(--deep) transparent;
-  display: block;
-  width: 0;
-}
-#scrollHint.vis {
-  opacity: 1;
-  transform: translateY(0);
-  animation: floatHint 2s ease-in-out infinite;
-}
-@keyframes floatHint {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
+#scrollHint::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: var(--deep) transparent; display: block; width: 0; }
+#scrollHint.vis { opacity: 1; transform: translateY(0); animation: floatHint 2s ease-in-out infinite; }
+@keyframes floatHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
-/* Colocación de los puntitos de navegación con mayor espacio derecho */
 .nav-dots{
   position:fixed;
-  right:24px; /* Mayor separación del borde del slider */
+  right:24px; 
   top:50%;
   transform:translateY(-50%);
   z-index:100;
@@ -379,23 +297,12 @@ body{
   transition:opacity .6s;
 }
 .nav-dots.vis{opacity:1}
-.ndot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:rgba(233,30,99,0.12);
-  cursor:pointer;
-  transition:all .3s;
-  border:1px solid rgba(233,30,99,0.3);
-  box-shadow:0 1px 4px rgba(0,0,0,0.05);
-  padding:0;
-}
-.ndot:hover{background:rgba(233,30,99,0.4)}
+.ndot{ width:10px; height:10px; border-radius:50%; background:rgba(233,30,99,0.12); cursor:pointer; transition:all .3s; border:1px solid rgba(233,30,99,0.3); padding:0; }
 .ndot.act{background:var(--deep);border-color:#ffd700;transform:scale(1.6);box-shadow:0 0 10px rgba(233,30,99,.4)}
 
-.deco{position:absolute;pointer-events:none;opacity:.5;font-size:20px}
-.click-sparkle{position:fixed;pointer-events:none;z-index:9999;color:var(--deep);font-weight:bold}
-.fl{display:inline-block}
+.deco{position:absolute;pointer-events:none;opacity:.5;font-size:20px; will-change: transform;}
+.click-sparkle{position:fixed;pointer-events:none;z-index:9999;color:var(--deep);font-weight:bold; will-change: transform, opacity;}
+.fl{display:inline-block; will-change: transform;}
 </style>
 </head>
 <body>
@@ -423,7 +330,6 @@ body{
 <div id="app">
   <div id="slider">
 
-    <!-- 1. PORTADA -->
     <section class="sec" id="s0">
       <span class="deco" style="top:15%;left:10%;color:var(--deep)">✦</span>
       <span class="deco" style="top:25%;right:15%;color:var(--pink-accent)">❀</span>
@@ -431,13 +337,12 @@ body{
       <span class="deco" style="bottom:30%;right:10%;color:var(--coral)">❋</span>
       <div class="sec-c">
         <p class="rv" style="font-size:.85rem;letter-spacing:4px;text-transform:uppercase;color:var(--deep);font-weight:600">Está invitado/a</p>
-        <h1 class="rv tg fl" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">A mi cumpleaños</h1>
+        <h1 class="rv tg fl" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">A MI CUMPLEAÑOS</h1>
         <div class="divd rv"></div>
         <p class="rv" style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1rem,3vw,1.3rem);color:var(--dark-berry)">Celebre conmigo un año más de vida</p>
       </div>
     </section>
 
-    <!-- 2. HOSTS -->
     <section class="sec" id="s1">
       <span class="deco" style="top:20%;left:12%;color:var(--deep)">✦</span>
       <span class="deco" style="bottom:25%;right:12%;color:var(--pink-accent)">✦</span>
@@ -451,14 +356,13 @@ body{
           <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:3px;color:var(--deep);margin-bottom:12px;font-weight:600">Le invitan</p>
           <div style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap">
             <div><p style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark-berry)">Isabel Yax</p><p style="font-size:.7rem;color:var(--deep)">Madre</p></div>
-            <span style="color:var(--deep);font-size:1.2rem">& &nbsp;</span>
+            <span style="color:var(--deep);font-size:1.2rem">&  </span>
             <div><p style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark-berry)">Emilio</p><p style="font-size:.7rem;color:var(--deep)">Padre</p></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. DATE & COUNTDOWN -->
     <section class="sec" id="s2">
       <span class="deco" style="top:18%;left:15%;color:var(--deep)">✦</span>
       <span class="deco" style="bottom:22%;right:18%;color:var(--coral)">✦</span>
@@ -478,7 +382,6 @@ body{
       </div>
     </section>
 
-    <!-- 4. LOCATION -->
     <section class="sec" id="s3">
       <span class="deco" style="top:22%;left:10%;color:var(--deep)">✦</span>
       <span class="deco" style="bottom:18%;right:12%;color:var(--pink-accent)">✦</span>
@@ -493,7 +396,6 @@ body{
       </div>
     </section>
 
-    <!-- 5. GIFTS (REDISEÑADA Y SIMPLIFICADA) -->
     <section class="sec" id="s4">
       <span class="deco" style="top:20%;left:12%;color:var(--deep)">✦</span>
       <span class="deco" style="bottom:25%;right:10%;color:var(--pink-accent)">❋</span>
@@ -501,7 +403,7 @@ body{
         <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-gift"></i></div>
         <h2 class="stit rv tg fl">Regalos</h2>
         <div class="divd rv"></div>
-        <div class="hcard rv" style="max-width:440px;margin:10px auto 0;background:rgba(255,255,255,0.75);border:1px solid rgba(233,30,99,0.15)">
+        <div class="hcard rv" style="max-width:440px;margin:10px auto 0;background:rgba(255,255,255,0.85);border:1px solid rgba(233,30,99,0.15)">
           <p class="rv" style="font-size:1.05rem;color:var(--dark-berry);line-height:1.7;font-family:'Playfair Display',serif;font-style:italic">
             "Su presencia es el mejor regalo que puedo recibir. Lo más importante es contar con su valiosa compañía para celebrar juntos este día tan especial."
           </p>
@@ -509,7 +411,6 @@ body{
       </div>
     </section>
 
-    <!-- 6. CONFIRM -->
     <section class="sec" id="s5">
       <span class="deco" style="top:22%;left:15%;color:#25d366">✦</span>
       <span class="deco" style="bottom:20%;right:15%;color:var(--deep)">✦</span>
@@ -522,7 +423,6 @@ body{
       </div>
     </section>
 
-    <!-- 7. SOUVENIR -->
     <section class="sec" id="s6">
       <span class="deco" style="top:15%;right:12%;color:var(--deep)">✦</span>
       <span class="deco" style="bottom:22%;left:12%;color:var(--pink-accent)">❀</span>
@@ -542,7 +442,6 @@ body{
       </div>
     </section>
 
-    <!-- 8. FAREWELL -->
     <section class="sec" id="s7">
       <span class="deco" style="top:18%;left:10%;color:var(--deep)">❀</span>
       <span class="deco" style="top:25%;right:12%;color:var(--pink-accent)">✦</span>
@@ -563,10 +462,8 @@ body{
 
 <button id="nextBtn"><i class="fa-solid fa-chevron-down"></i></button>
 
-<!-- TOOLTIP INDICA ACCION DE SCROLL -->
 <div id="scrollHint"><i class="fa-solid fa-hand-pointer" style="margin-right:6px"></i>Toque la flecha para continuar</div>
 
-<!-- Navigation dots de 8 secciones -->
 <nav class="nav-dots" id="navDots">
   <button class="ndot act" data-i="0"></button>
   <button class="ndot" data-i="1"></button>
@@ -596,12 +493,22 @@ let envelopeOpened = false;
 let hintTimer;
 let scrollHintTimer;
 
-// ============ PARTÍCULAS EN TONOS ROSADOS Y BLANCOS ============
 const bgCanvas = document.getElementById('bg-canvas');
 const bgCtx = bgCanvas.getContext('2d');
 let particles = [];
 function resizeBgCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
-resizeBgCanvas(); window.addEventListener('resize', resizeBgCanvas);
+resizeBgCanvas(); 
+
+// Aquí metimos el debounce del resize para que no laggee
+let resizeTmr;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTmr);
+  resizeTmr = setTimeout(() => {
+    resizeBgCanvas(); 
+    confCanvas.width = window.innerWidth; 
+    confCanvas.height = window.innerHeight;
+  }, 200);
+});
 
 class Particle {
   constructor() { this.reset(); }
@@ -616,7 +523,8 @@ class Particle {
   update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > bgCanvas.width || this.y < 0 || this.y > bgCanvas.height) this.reset(); }
   draw() { bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); bgCtx.fillStyle = this.color; bgCtx.fill(); }
 }
-for (let i = 0; i < 80; i++) particles.push(new Particle());
+// Bajamos de 80 a 35 partículas, el performance te lo va a agradecer
+for (let i = 0; i < 35; i++) particles.push(new Particle());
 function animateParticles() {
   bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
   particles.forEach(p => { p.update(); p.draw(); });
@@ -639,7 +547,6 @@ function animateParticles() {
 }
 animateParticles();
 
-// ============ EFECTO CLIC CHIC ============
 document.addEventListener('click', (e) => {
   if (e.target.closest('button, a, input')) return;
   const emojis = ['✦', '❤', '✨', '🌸', '💫'];
@@ -650,7 +557,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ============ ENVELOPE ============
 const colors = ['#ffd700', '#ff4081', '#fce4ec', '#ffffff'];
 for (let i = 0; i < 60; i++) { const s = document.createElement('div'); s.className = 'o-star'; s.style.cssText = `width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%4]};animation:twk ${2+Math.random()*4}s ease-in-out infinite alternate;animation-delay:${Math.random()*5}s`; overlay.appendChild(s); }
 function startHintTimer() { clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (!envelopeOpened) hint.classList.add('vis'); }, 5000); }
@@ -691,21 +597,18 @@ function openEnvelope() {
   }, 1600);
 }
 
-/* Detiene la reproducción si la pestaña/app pasa a segundo plano o se minimiza */
 document.addEventListener('visibilitychange', () => {
   const music = document.getElementById('bg-music');
   if (!music) return;
   if (document.hidden) {
     music.pause();
   } else {
-    // Solo reanudamos la música si el sobre ya fue abierto previamente
     if (envelopeOpened) {
       music.play().catch(err => console.log("La reproducción automática en reingreso falló:", err));
     }
   }
 });
 
-// ============ CONFETTI ============
 const confCanvas = document.getElementById('confetti-canvas');
 const confCtx = confCanvas.getContext('2d');
 confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight;
@@ -713,7 +616,6 @@ const confParts = []; const confColors = ['#ff4081', '#ffd700', '#f8bbd0', '#e91
 function launchConfetti() { for (let i = 0; i < 200; i++) { confParts.push({ x: confCanvas.width/2, y: confCanvas.height/2, vx: (Math.random()-.5)*20, vy: -8-Math.random()*14, w: 4+Math.random()*6, h: 3+Math.random()*4, color: confColors[Math.floor(Math.random()*5)], rot: Math.random()*Math.PI*2, rv: (Math.random()-.5)*0.3, gravity: 0.12+Math.random()*0.08, opacity: 1 }); } animConf(); }
 function animConf() { confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height); let alive = false; confParts.forEach(p => { if (p.opacity <= 0) return; alive = true; p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.99; p.rot += p.rv; if (p.y > confCanvas.height + 20) { p.opacity = 0; return; } if (p.y > confCanvas.height * 0.7) p.opacity -= 0.02; confCtx.save(); confCtx.translate(p.x, p.y); confCtx.rotate(p.rot); confCtx.globalAlpha = Math.max(0, p.opacity); confCtx.fillStyle = p.color; confCtx.fillRect(-p.w/2, -p.h/2, p.w, p.h); confCtx.restore(); }); if (alive) requestAnimationFrame(animConf); }
 
-// ============ COUNTDOWN ============
 const targetDate = new Date(Date.UTC(2026, 5, 16, 2, 0, 0)).getTime();
 
 function updateCountdown() {
@@ -741,7 +643,6 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-// ============ GSAP ANIMATIONS ============
 function initGSAP() {
   gsap.killTweensOf('.rv'); 
   gsap.set('.rv', { autoAlpha: 0, y: 40 });
@@ -771,7 +672,6 @@ function animateSectionOut(index) {
   return gsap.to(els, { autoAlpha: 0, y: -30, duration: 0.4, ease: "power2.in", overwrite: true });
 }
 
-// ============ SLIDER ============
 function goToSection(idx) {
   if (isAnimating || idx < 0 || idx >= totalSections) return;
   isAnimating = true;
@@ -809,7 +709,6 @@ document.addEventListener('touchend', (e) => {
   }
 });
 
-// ============ REINICIAR ============
 function resetInvitation() {
   isAnimating = true;
   hideScrollHint();
@@ -832,7 +731,6 @@ function resetInvitation() {
   }});
 }
 
-// ============ SOUVENIR (PINK CANVAS GENERATION) ============
 function downloadSouvenir() {
   const name = document.getElementById('souvName').value.trim() || 'Invitado Especial';
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1440; const c = canvas.getContext('2d');
@@ -889,8 +787,6 @@ function downloadSouvenir() {
   
   const link = document.createElement('a'); link.download = 'invitacion-monica.png'; link.href = canvas.toDataURL('image/png'); link.click();
 }
-
-window.addEventListener('resize', () => { confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight; });
 </script>
 </body>
 </html>
