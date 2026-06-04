@@ -15,7 +15,7 @@
   --deep: #e91e63;       /* Rosa Fuerte */
   --sec: #ffffff;        /* Blanco Impecable */
   --pink-accent: #ff4081;/* Rosa Acento */
-  --dark-berry: #4a0e2e; /* Borgoña contrastante de alta elegancia */
+  --dark-berry: #4a0e2e; /* Borgoña de alta elegancia */
   --gold: #d4af37;       /* Dorado mate de alta legibilidad */
   --coral: #ff8a80;
   --lav: #ffeef2;        /* Rosa pastel súper suave */
@@ -33,7 +33,6 @@ body{
 
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* STYLING OVERLAY & ENVELOPE IN PINK & WHITE */
 #overlay{
   position:fixed;
   inset:0;
@@ -148,29 +147,54 @@ body{
 
 #app{position:relative;height:100vh;width:100vw;overflow:hidden;z-index:1;opacity:0}
 #slider{height:800vh;width:100vw;position:relative;will-change:transform}
-.sec{height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:40px 20px}
-.sec-c{position:relative;z-index:2;text-align:center;max-width:540px;width:100%;margin:auto}
 
-/* S0: Degradado radial suave con aura luminosa central */
+/* Aumentamos el padding-right de las secciones para dar un margen más grueso ante los puntitos */
+.sec{
+  height:100vh;
+  width:100vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  padding:30px 40px 30px 40px; /* Acolchado amplio a la derecha para no chocar con navegación */
+}
+/* Reducimos ligeramente el max-width del contenido para compactar y proteger de colisiones laterales */
+.sec-c{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  max-width:480px; 
+  width:100%;
+  margin:auto;
+}
+
+@media(max-width: 640px) {
+  .sec {
+    padding: 30px 40px 30px 40px; /* Ajuste adaptado en móviles manteniendo la protección derecha */
+  }
+}
+
+/* S0: Degradado radial con aura luminosa central */
 #s0 {
   background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fff2f5 55%, #ffd3e0 100%);
 }
-/* S1: Rayas verticales de diseño de alta costura */
+/* S1: Rayas verticales finas */
 #s1 {
   background-color: #ffffff;
   background-image: repeating-linear-gradient(90deg, rgba(233,30,99,0.015) 0px, rgba(233,30,99,0.015) 2px, transparent 2px, transparent 12px),
                     linear-gradient(135deg, #ffffff 0%, #fff2f5 100%);
 }
-/* S2: Románticos lunares finos y translúcidos */
+/* S2: Románticos lunares finos */
 #s2 {
   background-color: #ffffff;
-  background-image: radial-gradient(rgba(233,30,99,0.035) 15%, transparent 16%),
-                    radial-gradient(rgba(233,30,99,0.035) 15%, transparent 16%),
+  background-image: radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%),
+                    radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%),
                     linear-gradient(to bottom, #ffffff 0%, #ffeef2 100%);
   background-size: 24px 24px, 24px 24px, 100% 100%;
   background-position: 0 0, 12px 12px, 0 0;
 }
-/* S3: Cuadrícula de estudio moderna en tono rosa tierno */
+/* S3: Cuadrícula moderna en tono rosa tierno */
 #s3 {
   background-color: #ffffff;
   background-image: linear-gradient(0deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px),
@@ -178,7 +202,7 @@ body{
                     linear-gradient(to bottom, #ffffff, #fff5f7);
   background-size: 28px 28px;
 }
-/* S4: Resplandor radial elegante asimétrico */
+/* S4: Resplandor radial asimétrico */
 #s4 {
   background: radial-gradient(circle at 15% 15%, #ffffff 0%, #fff1f4 50%, #ffd0dd 100%);
 }
@@ -341,7 +365,19 @@ body{
   50% { transform: translateY(-6px); }
 }
 
-.nav-dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity .6s}
+/* Colocación de los puntitos de navegación con mayor espacio derecho */
+.nav-dots{
+  position:fixed;
+  right:24px; /* Mayor separación del borde del slider */
+  top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  opacity:0;
+  transition:opacity .6s;
+}
 .nav-dots.vis{opacity:1}
 .ndot{
   width:10px;
@@ -395,8 +431,7 @@ body{
       <span class="deco" style="bottom:30%;right:10%;color:var(--coral)">❋</span>
       <div class="sec-c">
         <p class="rv" style="font-size:.85rem;letter-spacing:4px;text-transform:uppercase;color:var(--deep);font-weight:600">Está invitado/a</p>
-        <h1 class="rv tg fl" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">Mónica</h1>
-        <h2 class="stit rv" style="font-size:1.20rem;letter-spacing:3px;color:var(--dark-berry);margin-top:6px;font-weight:600">¡A MI CUMPLEAÑOS!</h2>
+        <h1 class="rv tg fl" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">A mi cumpleaños</h1>
         <div class="divd rv"></div>
         <p class="rv" style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1rem,3vw,1.3rem);color:var(--dark-berry)">Celebre conmigo un año más de vida</p>
       </div>
@@ -576,7 +611,6 @@ class Particle {
     this.size = Math.random() * 2 + 0.5; 
     this.speedX = (Math.random() - 0.5) * 0.3; 
     this.speedY = (Math.random() - 0.5) * 0.3; 
-    // Paleta de colores rosa pastel, fucsia y dorados
     this.color = ['#e91e63', '#ffffff', '#ffd700', '#ff80ab'][Math.floor(Math.random() * 4)]; 
   }
   update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > bgCanvas.width || this.y < 0 || this.y > bgCanvas.height) this.reset(); }
@@ -653,9 +687,23 @@ function openEnvelope() {
     navDotsEl.classList.add('vis'); nextBtn.classList.add('show');
     initGSAP(); 
     animateSectionIn(0);
-    startScrollHintTimer(); // Inicia temporizador de scrollHint en la portada
+    startScrollHintTimer(); 
   }, 1600);
 }
+
+/* Detiene la reproducción si la pestaña/app pasa a segundo plano o se minimiza */
+document.addEventListener('visibilitychange', () => {
+  const music = document.getElementById('bg-music');
+  if (!music) return;
+  if (document.hidden) {
+    music.pause();
+  } else {
+    // Solo reanudamos la música si el sobre ya fue abierto previamente
+    if (envelopeOpened) {
+      music.play().catch(err => console.log("La reproducción automática en reingreso falló:", err));
+    }
+  }
+});
 
 // ============ CONFETTI ============
 const confCanvas = document.getElementById('confetti-canvas');
@@ -727,7 +775,7 @@ function animateSectionOut(index) {
 function goToSection(idx) {
   if (isAnimating || idx < 0 || idx >= totalSections) return;
   isAnimating = true;
-  hideScrollHint(); // Oculta el tooltip al cambiar de sección
+  hideScrollHint(); 
   animateSectionOut(currentSection);
   gsap.to(slider, { y: `-${idx * 100}vh`, duration: 1, ease: "power3.inOut", onComplete: () => { 
     currentSection = idx; 
@@ -789,7 +837,6 @@ function downloadSouvenir() {
   const name = document.getElementById('souvName').value.trim() || 'Invitado Especial';
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1440; const c = canvas.getContext('2d');
   
-  // Pink to Magenta solid gradient background
   const bg = c.createLinearGradient(0, 0, canvas.width, canvas.height); 
   bg.addColorStop(0, '#ffffff'); 
   bg.addColorStop(0.5, '#fff0f5'); 
