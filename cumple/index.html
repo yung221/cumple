@@ -29,17 +29,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Oculta los controles de flechas para input[type="number"] */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-
         /* Animación para el efecto de carga del subtotal y ganancia */
         @keyframes neon-flash {
             0% {
@@ -195,7 +184,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             width: min(430px, 100%);
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 9999px;
             padding: 3px;
@@ -268,7 +257,7 @@
 
         /* ===== Decimales en superíndice (más chiquitos y delgados) ===== */
         .money-decimals {
-            font-size: 0.62em;
+            font-size: 0.72em;
             font-weight: 500;
             vertical-align: super;
             line-height: 0;
@@ -437,17 +426,17 @@
 <body class="flex flex-col items-center justify-start min-h-screen">
     <!-- Contenedor principal con márgenes para dispositivos móviles -->
     <div class="bg-black text-white w-full min-h-screen px-4 md:px-8 pt-4 pb-44 md:pb-36">
-        <!-- Barra fija inferior: panel "Más opciones" + conmutador Mañana / Tarde / Pago -->
-        <div class="fixed bottom-0 left-0 right-0 z-[999] flex flex-col items-center gap-3 px-4 pb-3 pointer-events-none">
-            <!-- Panel de más opciones (aparece al llegar al final de la página) -->
+        <!-- Barra fija inferior: mini "Más opciones" + conmutador Mañana / Tarde / Pago -->
+        <div class="fixed bottom-0 left-0 right-0 z-[999] flex flex-col items-center px-4 pb-3 pointer-events-none">
+            <!-- Panel: se asoma detrás del conmutador (aparece al llegar al final de la página) -->
             <div id="more-options-panel"
-                class="hidden flex flex-col items-center bg-black/70 backdrop-blur-md border border-gray-700 rounded-2xl px-3 py-2 shadow-[0_-8px_30px_rgba(0,0,0,0.6)] pointer-events-auto">
+                class="hidden flex flex-col items-center relative z-0 mb-[-8px] pointer-events-auto">
                 <button id="more-options-btn"
-                    class="px-4 py-1.5 rounded-full font-medium glass-btn text-sm"
+                    class="px-4 py-1.5 rounded-t-xl border-b-0 border border-white/15 bg-white/10 backdrop-blur-sm text-xs font-medium text-gray-200"
                     title="Mostrar más opciones">
                     Más opciones
                 </button>
-                <div id="more-options-row" class="hidden flex items-center justify-center w-full gap-2">
+                <div id="more-options-row" class="hidden flex items-center justify-center w-full gap-2 bg-black/70 backdrop-blur-md border-b-0 border border-white/15 rounded-t-2xl px-3 py-2">
                     <button class="toggle-precio-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
                         title="Mostrar/Ocultar precios">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform"
@@ -475,7 +464,7 @@
                     </button>
                 </div>
             </div>
-            <div class="toggle-switch slider-manana pointer-events-auto shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
+            <div class="toggle-switch slider-manana pointer-events-auto relative z-10 shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
                 id="toggle-view-switch">
                 <div class="toggle-slider"></div>
                 <div class="toggle-option active" data-opt="manana" id="btn-manana">Mañana</div>
@@ -514,7 +503,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Pirujos grandes</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -527,7 +516,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Pirujitos</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -540,7 +529,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Tostados</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -553,7 +542,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Pan dulce</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -566,7 +555,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="2.40">Q2.40</span>
                     <span class="text-left">Francés</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -579,7 +568,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Pan grande</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -592,7 +581,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Zepelines</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -605,7 +594,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="3.75">Q3.75</span>
                     <span class="text-left">Filas de galleta</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -618,7 +607,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
                     <span class="text-left">Champurradas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -631,7 +620,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
                     <span class="text-left">Champurradas integrales</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -671,7 +660,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Campechanas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -684,7 +673,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Lenguas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -697,7 +686,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Pirujos grandes</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -710,7 +699,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Pan grande</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -723,7 +712,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Cortadas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -736,7 +725,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Zepelines</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -749,7 +738,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Tostados</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -762,7 +751,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Pan dulce</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -775,7 +764,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Pirujitos</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -788,7 +777,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="2.40">Q2.40</span>
                     <span class="text-left">Francés</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -801,7 +790,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="3.75">Q3.75</span>
                     <span class="text-left">Filas de galleta</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -814,7 +803,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Bollos</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -827,7 +816,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1">Q1</span>
                     <span class="text-left">Bocados</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -840,7 +829,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Pan integral</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -853,7 +842,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
                     <span class="text-left">Empanadas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -866,7 +855,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Encanelados</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -879,7 +868,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Trenzas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -892,7 +881,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Palitos</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -905,7 +894,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Cemitas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -918,7 +907,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
                     <span class="text-left">Polvorosas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -931,7 +920,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
                     <span class="text-left">Donas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -944,7 +933,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
                     <span class="text-left">Cubilete de queso</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -957,7 +946,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
                     <span class="text-left">Cubilete de chocolate</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -970,7 +959,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
                     <span class="text-left">Champurradas</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -983,7 +972,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
                     <span class="text-left">Champurradas integrales</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -996,7 +985,7 @@
                     <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
                     <span class="text-left">Molletes</span>
                     <div class="flex justify-center">
-                        <input type="number" placeholder="" min="1"
+                        <input type="text" inputmode="decimal" placeholder=""
                             class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
                     </div>
                     <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
@@ -1232,7 +1221,11 @@
             const num = Number(value) || 0;
             const fixed = num.toFixed(2);
             const [whole, dec] = fixed.split('.');
-            return `${qsymbol}${Number(whole).toLocaleString('es-GT')}<span class="money-decimals">.${dec}</span>`;
+            const wholeLocal = Number(whole).toLocaleString('es-GT');
+            if (dec === '00') {
+                return `${qsymbol}${wholeLocal}`;
+            }
+            return `${qsymbol}${wholeLocal}.<span class="money-decimals">${dec}</span>`;
         }
 
         function moneyHTMLLocal(value) {
@@ -1256,12 +1249,12 @@
 
                 const dm = text.match(/\.\d+$/);
                 if (dm) {
-                    const intPart = text.slice(0, dm.index);
+                    const intPart = text.slice(0, dm.index) + '.';
                     const decPart = text.slice(dm.index + 1);
                     const intText = document.createTextNode(intPart);
                     const sup = document.createElement('span');
                     sup.className = 'money-decimals';
-                    sup.textContent = '.' + decPart;
+                    sup.textContent = decPart;
                     parent.insertBefore(intText, node);
                     parent.insertBefore(sup, node);
                     node.remove();
@@ -1673,7 +1666,29 @@
             // Botón Pago dentro del switch
             btnPago.addEventListener('click', () => {
                 setSwitchState('pago');
+                // Al pasar a Pago se oculta el panel "Más opciones"
+                if (typeof hideMoreOptions === 'function') {
+                    hideMoreOptions();
+                }
                 openResumenModal();
+            });
+
+            // Al tocar un input de cantidad, el cursor siempre va al final
+            document.addEventListener('focusin', (event) => {
+                if (event.target.classList.contains('cantidad-input')) {
+                    requestAnimationFrame(() => {
+                        try {
+                            event.target.setSelectionRange(event.target.value.length, event.target.value.length);
+                        } catch (err) { }
+                    });
+                }
+            });
+            document.addEventListener('click', (event) => {
+                if (event.target.classList.contains('cantidad-input')) {
+                    try {
+                        event.target.setSelectionRange(event.target.value.length, event.target.value.length);
+                    } catch (err) { }
+                }
             });
 
             // Función para alternar la visibilidad de la columna
