@@ -1,792 +1,1935 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#e91e63">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Cumple de Mónica</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --deep: #e91e63;
-  --sec: #ffffff;
-  --pink-accent: #ff4081;
-  --dark-berry: #4a0e2e;
-  --gold: #d4af37;
-  --coral: #ff8a80;
-  --lav: #ffeef2;
-  --teal: #00bfa5;
-}
-body{
-  font-family:'Poppins',sans-serif;
-  background: var(--lav);
-  color: var(--dark-berry);
-  overflow:hidden;
-  height:100vh;
-  width:100vw;
-  cursor:crosshair;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panadería MDJ</title>
 
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+    <meta name="theme-color" content="#000000" />
 
-#overlay{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  background: radial-gradient(ellipse at 50% 40%, #ff80ab, #e91e63 75%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  transition:opacity 1.2s ease;
-}
-#overlay.hide{opacity:0;pointer-events:none}
-.o-star{position:absolute;border-radius:50%;pointer-events:none;opacity:.5; will-change: transform, opacity;}
+    <meta name="color-scheme" content="dark light" />
 
-.env-wrap{perspective:1200px;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent}
-.env{position:relative;width:280px;height:200px;animation:shk .5s ease-in-out infinite alternate;transform-style:preserve-3d; will-change: transform;}
-.env:hover{transform:scale(1.06)}
-.env.opening{animation:none}
-@keyframes shk{0%{transform:rotate(-3deg) translateY(-2px)}100%{transform:rotate(3deg) translateY(-2px)}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <!-- Add Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-.env-body{
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:linear-gradient(155deg,#ffffff,#fff0f5,#f8bbd0);
-  border-radius:0 0 14px 14px;
-  box-shadow:0 20px 60px rgba(233,30,99,.25),0 6px 20px rgba(0,0,0,.15);
-  z-index:1;
-  overflow:hidden;
-}
-.env-body::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:70%;
-  background:linear-gradient(155deg,#ffffff,#fff0f5);
-  clip-path:polygon(0 0,50% 65%,100% 0);
-  z-index:1;
-}
-.env-body::after{
-  content:'';
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:100%;
-  height:45%;
-  background:linear-gradient(0deg,#fff0f5,#f8bbd0);
-  clip-path:polygon(0 100%,50% 30%,100% 100%);
-  z-index:2;
-}
-.env-flap{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:62%;
-  background:linear-gradient(180deg,#f48fb1,#e91e63);
-  clip-path:polygon(0 0,50% 100%,100% 0);
-  transform-origin:top center;
-  transform:rotateX(0deg);
-  transition:transform .9s cubic-bezier(.4,0,.2,1);
-  z-index:4;
-  backface-visibility:hidden;
-  will-change: transform;
-}
-.env.opening .env-flap{transform:rotateX(-180deg)}
-.env-seal{
-  position:absolute;
-  width:52px;
-  height:52px;
-  background:radial-gradient(circle at 40% 35%,#ffd700,#ffb300);
-  border-radius:50%;
-  top:56%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  z-index:5;
-  transition:all .4s;
-  box-shadow:0 0 30px rgba(255,215,0,.4);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:pseal 2s ease-in-out infinite;
-  will-change: transform, opacity, box-shadow;
-}
-@keyframes pseal{0%,100%{box-shadow:0 0 20px rgba(255,215,0,.3)}50%{box-shadow:0 0 40px rgba(255,215,0,.6)}}
-.env-seal::after{content:'❤';color:rgba(255,255,255,.95);font-size:20px}
-.env.opening .env-seal{opacity:0;transform:translate(-50%,-50%) scale(2.5)}
-.env-letter{
-  position:absolute;
-  width:234px;
-  height:155px;
-  background:linear-gradient(180deg,#ffffff,#ffe4e1);
-  top:22px;
-  left:23px;
-  border-radius:10px;
-  z-index:2;
-  transition:transform 1s cubic-bezier(.25,.46,.45,.94) .35s;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 2px 12px rgba(0,0,0,.08);
-  will-change: transform;
-}
-.env-letter .ln{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#e91e63}
-.env-letter .ls{font-size:10px;color:#880e4f;margin-top:4px;letter-spacing:2px;text-transform:uppercase}
-.env.opening .env-letter{transform:translateY(-210px) scale(1.08) rotate(-5deg)}
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #000000;
+        }
 
-#hint{margin-top:40px;font-size:14px;color:var(--lav);opacity:0;position:relative;z-index:10}
-#hint.vis{opacity:1}
+        /* Fuente Outfit en todo */
+        * {
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-#confetti-canvas{position:fixed;inset:0;z-index:999;pointer-events:none}
+        /* Oculta los controles de flechas para input[type="number"] */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-#app{position:relative;height:100vh;width:100vw;overflow:hidden;z-index:1;opacity:0}
-#slider{height:800vh;width:100vw;position:relative;will-change:transform}
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
 
-.sec{
-  height:100vh;
-  width:100vw;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  overflow:hidden;
-  padding:40px 40px 40px 40px; 
-}
-.sec-c{
-  position:relative;
-  z-index:2;
-  text-align:center;
-  max-width:480px; 
-  width:100%;
-  margin:auto;
-}
+        /* Animación para el efecto de carga del subtotal y ganancia */
+        @keyframes neon-flash {
+            0% {
+                color: #fff;
+            }
 
-@media(max-width: 640px) {
-  .sec { padding: 30px 40px 30px 40px; }
-}
+            50% {
+                color: #ff1493;
+            }
 
-#s0 { background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fff2f5 55%, #ffd3e0 100%); }
-#s1 { background-color: #ffffff; background-image: repeating-linear-gradient(90deg, rgba(233,30,99,0.015) 0px, rgba(233,30,99,0.015) 2px, transparent 2px, transparent 12px), linear-gradient(135deg, #ffffff 0%, #fff2f5 100%); }
-#s2 { background-color: #ffffff; background-image: radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%), radial-gradient(rgba(233,30,99,0.03) 15%, transparent 16%), linear-gradient(to bottom, #ffffff 0%, #ffeef2 100%); background-size: 24px 24px, 24px 24px, 100% 100%; background-position: 0 0, 12px 12px, 0 0; }
-#s3 { background-color: #ffffff; background-image: linear-gradient(0deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px), linear-gradient(to bottom, #ffffff, #fff5f7); background-size: 28px 28px; }
-#s4 { background: radial-gradient(circle at 15% 15%, #ffffff 0%, #fff1f4 50%, #ffd0dd 100%); }
-#s5 { background-color: #ffffff; background-image: repeating-linear-gradient(45deg, rgba(233,30,99,0.012) 0px, rgba(233,30,99,0.012) 2px, transparent 2px, transparent 16px), linear-gradient(180deg, #ffffff 0%, #ffebf1 100%); }
-#s6 { background-color: #ffffff; background-image: linear-gradient(135deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(225deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(45deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(315deg, rgba(233, 30, 99, 0.015) 25%, transparent 25%), linear-gradient(to right, #ffffff, #ffeef2); background-position: 15px 0, 15px 0, 0 0, 0 0; background-size: 30px 30px; background-repeat: repeat; }
-#s7 { background: radial-gradient(circle at 50% 110%, #ffccd8 0%, #fff0f5 55%, #ffffff 100%); }
+            /* Rosa neón */
+            100% {
+                color: #fff;
+            }
+        }
 
-.tg{ background: linear-gradient(135deg, var(--deep), var(--dark-berry), var(--deep)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .animate-neon-flash {
+            animation: neon-flash 0.5s ease-in-out;
+        }
 
-.stit{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.6rem,5vw,2.3rem);margin-bottom:6px;color:var(--dark-berry)}
-.ssub{font-weight:300;font-size:clamp(.82rem,2.2vw,1rem);color:var(--dark-berry);opacity:0.85;margin-bottom:24px}
-.divd{width:55px;height:2px;background:linear-gradient(90deg,transparent,var(--deep),transparent);margin:16px auto}
-.icirc{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.3rem;background:linear-gradient(135deg, rgba(233,30,99,0.1), rgba(233,30,99,0.05))}
+        /* Animación para el spinner de carga de la pestaña */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
 
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;border:none;transition:all .3s;text-decoration:none;color:#fff}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(233,30,99,0.25)}
-.btn:active{transform:scale(0.95)}
-.btn-gold{background:linear-gradient(135deg,#ffd700,#ffb300);color:#3c071e}
-.btn-green{background:linear-gradient(135deg,#25d366,#128c7e); color: #fff}
-.btn-pink{background:linear-gradient(135deg,#ff4081,#e91e63);color:#fff}
-.btn-outline-pink{background:transparent;border:2px solid #e91e63;color:#e91e63}
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-.hcard{
-  background:rgba(255,255,255,.9); 
-  border:1px solid rgba(233,30,99,0.12);
-  border-radius:16px;
-  padding:20px;
-  color: var(--dark-berry);
-}
+        /* ESTILOS DEL MODAL CORREGIDOS */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            /* Asegura el centrado */
+            justify-content: center;
+            align-items: center;
+        }
 
-.cd-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
-.cd-b{
-  background:rgba(255,255,255,.95);
-  border:1px solid rgba(233,30,99,0.15);
-  border-radius:14px;
-  padding:14px 4px;
-}
-.cd-n{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900;color:var(--deep);line-height:1}
-.cd-l{font-size:.65rem;color:var(--dark-berry);opacity:0.8;text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+        .modal-container {
+            /* Limita el ancho del contenedor en desktop pero permite usar 100% de su ancho interno */
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
 
-.souvenir-card{
-  background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
-  border:2px solid rgba(233,30,99,0.18);
-  border-radius:20px;
-  padding:28px 24px;
-  position:relative;
-  overflow:hidden;
-}
-.souvenir-input{
-  background:rgba(255,255,255,.9);
-  border:1px solid rgba(233,30,99,.2);
-  border-radius:10px;
-  padding:10px 16px;
-  color:var(--dark-berry);
-  font-family:'Playfair Display',serif;
-  font-size:1.1rem;
-  text-align:center;
-  width:100%;
-  outline:none;
-  transition:border-color .3s;
-}
+        .modal-content {
+            background-color: #000000;
+            padding: 2.5rem 1rem;
+            width: 90%;
+            /* Ancho predeterminado para dejar margen en desktop */
+            max-width: 500px;
 
-#nextBtn{
-  position:fixed;
-  bottom:30px;
-  right:24px;
-  z-index:100;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background:#e91e63;
-  border:none;
-  color:#ffffff;
-  font-size:1.2rem;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:all .3s;
-  box-shadow:0 4px 15px rgba(233,30,99,0.3);
-  opacity:0;
-  pointer-events:none;
-}
-#nextBtn.show{opacity:1;pointer-events:auto}
+            /* ESTILO SOLICITADO: BORDES RECTOS SIN ESQUINAS REDONDEADAS */
+            border: 1px solid #FFFFFF;
+            /* Borde base para color */
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+            /* Asegura que no haya redondeo */
 
-#scrollHint {
-  position: fixed;
-  bottom: 95px;
-  right: 14px;
-  background: var(--deep);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  box-shadow: 0 4px 18px rgba(233,30,99,0.35);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(12px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 101;
-  text-align: center;
-  white-space: nowrap;
-}
-#scrollHint::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: var(--deep) transparent; display: block; width: 0; }
-#scrollHint.vis { opacity: 1; transform: translateY(0); animation: floatHint 2s ease-in-out infinite; }
-@keyframes floatHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+            text-align: center;
+            position: relative;
+            /* Fondo liquid glass */
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(28px) saturate(170%);
+            -webkit-backdrop-filter: blur(28px) saturate(170%);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
 
-.nav-dots{
-  position:fixed;
-  right:24px; 
-  top:50%;
-  transform:translateY(-50%);
-  z-index:100;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  opacity:0;
-  transition:opacity .6s;
-}
-.nav-dots.vis{opacity:1}
-.ndot{ width:10px; height:10px; border-radius:50%; background:rgba(233,30,99,0.12); cursor:pointer; transition:all .3s; border:1px solid rgba(233,30,99,0.3); padding:0; }
-.ndot.act{background:var(--deep);border-color:#ffd700;transform:scale(1.6);box-shadow:0 0 10px rgba(233,30,99,.4)}
+        /* En móvil, se expande a 100% de ancho sin límite de max-width */
+        @media (max-width: 767px) {
+            .modal-content {
+                width: 100%;
+                max-width: none;
+                padding: 2.5rem 0.5rem;
+            }
 
-.deco{position:absolute;pointer-events:none;opacity:.5;font-size:20px; will-change: transform;}
-.click-sparkle{position:fixed;pointer-events:none;z-index:9999;color:var(--deep);font-weight:bold; will-change: transform, opacity;}
-.fl{display:inline-block; will-change: transform;}
-</style>
+            /* Otros ajustes de layout móvil */
+            .grid-cols-5.responsive-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .precio-col,
+            .ganancia-col {
+                display: none;
+            }
+
+            .show-precio .responsive-grid {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            .show-precio .precio-col {
+                display: block;
+            }
+
+            .show-ganancia .responsive-grid {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            .show-ganancia .ganancia-col {
+                display: block;
+            }
+
+            .show-precio.show-ganancia .responsive-grid {
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            }
+
+            .show-precio.show-ganancia .precio-col,
+            .show-precio.show-ganancia .ganancia-col {
+                display: block;
+            }
+        }
+
+        /* COLORES NEÓN */
+        .neon-pink {
+            color: #fc3dff;
+            /* Rosa neón Correcto */
+        }
+
+        .neon-green {
+            color: #c3ff3d;
+        }
+
+        /* ===== Fuente para la Q de quetzales ===== */
+        .quetzal-symbol {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62em;
+            font-weight: 500;
+            opacity: 0.75;
+            letter-spacing: 0.02em;
+            vertical-align: baseline;
+            margin-right: 1px;
+        }
+
+        /* ===== Botón deslizante Mañana/Tarde ===== */
+        .toggle-switch {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: min(430px, 100%);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            padding: 3px;
+            overflow: hidden;
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: calc(33.333% - 2px);
+            border-radius: 9999px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+            z-index: 1;
+        }
+
+        .toggle-switch.slider-manana .toggle-slider {
+            background: linear-gradient(135deg, #c3ff3d, #8ce600);
+            transform: translateX(0);
+            box-shadow: 0 0 18px rgba(195, 255, 61, 0.55);
+        }
+
+        .toggle-switch.slider-tarde .toggle-slider {
+            background: linear-gradient(135deg, #fc3dff, #d10fd8);
+            transform: translateX(100%);
+            box-shadow: 0 0 18px rgba(252, 61, 255, 0.55);
+        }
+
+        .toggle-switch.slider-pago .toggle-slider {
+            background: linear-gradient(135deg, #00e5ff, #00a8ff);
+            transform: translateX(200%);
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.55);
+        }
+
+        .toggle-option {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .toggle-switch.slider-manana .toggle-option[data-opt="manana"] {
+            color: #000;
+        }
+
+        .toggle-switch.slider-tarde .toggle-option[data-opt="tarde"] {
+            color: #000;
+        }
+
+        .toggle-switch.slider-pago .toggle-option[data-opt="pago"] {
+            color: #000;
+        }
+
+        .toggle-option:not(.active) {
+            color: #fff;
+        }
+
+        /* ===== Decimales en superíndice (más chiquitos y delgados) ===== */
+        .money-decimals {
+            font-size: 0.62em;
+            font-weight: 500;
+            vertical-align: super;
+            line-height: 0;
+        }
+
+        /* ===== Animaciones ===== */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes overlayIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes overlayOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes boxIn {
+            0% {
+                opacity: 0;
+                transform: translateY(28px) scale(0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-5px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes boxOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.95);
+            }
+        }
+
+        .view-animate {
+            animation: fadeSlideIn 0.45s ease forwards;
+        }
+
+        .modal-anim-in {
+            animation: overlayIn 0.3s ease forwards;
+        }
+
+        .modal-anim-out {
+            animation: overlayOut 0.25s ease forwards;
+        }
+
+        .modal-box-in {
+            animation: boxIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .modal-box-out {
+            animation: boxOut 0.25s ease forwards;
+        }
+
+        /* Hover en filas de producto */
+        .product-row {
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+
+        .product-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* ===== Spinner bonito (neón con borde) ===== */
+        .animate-spin-custom {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top-color: #fc3dff;
+            border-right-color: #c3ff3d;
+            animation: spin 0.9s linear infinite;
+        }
+
+        .animate-spin-custom-sm {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top-color: #fc3dff;
+            border-right-color: #c3ff3d;
+            animation: spin 0.9s linear infinite;
+        }
+
+        /* ===== Efecto Liquid Glass ===== */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .liquid-glass-glow {
+            background: linear-gradient(160deg, rgba(252, 61, 255, 0.12), rgba(0, 0, 0, 0.5) 40%, rgba(195, 255, 61, 0.10));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        /* Botones primary (resumen/historial) con glass sutil */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            box-shadow: 0 0 20px rgba(252, 61, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .glass-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Botón de cerrar - color celeste simple */
+        .simple-blue-btn {
+            background-color: #00bcd4;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .simple-blue-btn:hover {
+            background-color: #0099ab;
+        }
+    </style>
 </head>
-<body>
-<audio id="bg-music" src="https://yung221.github.io/cumple/cumple/cumplemusic.mp3" loop></audio>
 
-<canvas id="bg-canvas"></canvas>
+<body class="flex flex-col items-center justify-start min-h-screen">
+    <!-- Contenedor principal con márgenes para dispositivos móviles -->
+    <div class="bg-black text-white w-full min-h-screen px-4 md:px-8 pt-4 pb-44 md:pb-36">
+        <!-- Barra fija inferior: panel "Más opciones" + conmutador Mañana / Tarde / Pago -->
+        <div class="fixed bottom-0 left-0 right-0 z-[999] flex flex-col items-center gap-3 px-4 pb-3 pointer-events-none">
+            <!-- Panel de más opciones (aparece al llegar al final de la página) -->
+            <div id="more-options-panel"
+                class="hidden flex flex-col items-center bg-black/70 backdrop-blur-md border border-gray-700 rounded-2xl px-3 py-2 shadow-[0_-8px_30px_rgba(0,0,0,0.6)] pointer-events-auto">
+                <button id="more-options-btn"
+                    class="px-4 py-1.5 rounded-full font-medium glass-btn text-sm"
+                    title="Mostrar más opciones">
+                    Más opciones
+                </button>
+                <div id="more-options-row" class="hidden flex items-center justify-center w-full gap-2">
+                    <button class="toggle-precio-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
+                        title="Mostrar/Ocultar precios">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <button class="btn-borrar-actual w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none"
+                        title="Borrar datos de la tabla actual">
+                        <img src="https://i.postimg.cc/zfz6ZsHK/borrar-icon.png" alt="Borrar" class="w-8 h-8 object-contain">
+                    </button>
+                    <button class="btn-historial px-4 py-2 rounded-full font-medium glass-btn">Historial</button>
+                    <button class="btn-guardar-diario w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none"
+                        title="Guardar totales del día">
+                        <img src="https://i.postimg.cc/MvdBQMDz/guardar-icon.png" alt="Guardar" class="w-8 h-8 object-contain">
+                    </button>
+                    <button class="toggle-ganancia-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
+                        title="Mostrar/Ocultar ganancias">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="toggle-switch slider-manana pointer-events-auto shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
+                id="toggle-view-switch">
+                <div class="toggle-slider"></div>
+                <div class="toggle-option active" data-opt="manana" id="btn-manana">Mañana</div>
+                <div class="toggle-option" data-opt="tarde" id="btn-tarde">Tarde</div>
+                <div class="toggle-option" data-opt="pago" id="btn-pago">Pago</div>
+            </div>
+        </div>
 
-<div id="overlay">
-  <div class="env-wrap" id="envWrap" onclick="openEnvelope()">
-    <div class="env" id="envelope">
-      <div class="env-body"></div>
-      <div class="env-flap"></div>
-      <div class="env-seal"></div>
-      <div class="env-letter">
-        <span class="ln">Mónica</span>
-        <span class="ls">Invitación de cumpleaños</span>
-      </div>
+        <!-- Encabezado -->
+        <div class="mt-4">
+            <h1 class="text-3xl font-bold mb-6 text-center">VENPAS</h1>
+        </div>
+
+        <!-- Spinner de carga -->
+        <div id="loading-spinner" class="hidden flex justify-center items-center h-48">
+            <div class="animate-spin-custom"></div>
+        </div>
+
+        <!-- Vista de la mañana (inicialmente visible) -->
+        <div id="manana-view" class="p-0">
+            <div class="flex flex-col gap-0">
+                <!-- Headers de la lista -->
+                <div
+                    class="grid grid-cols-5 responsive-grid items-center text-sm text-gray-400 font-medium pb-1 border-b border-gray-600">
+                    <span class="text-center precio-col">Precio</span>
+                    <span class="text-left">Producto</span>
+                    <span class="text-center">Cantidad</span>
+                    <span class="text-center">Subtotal</span>
+                    <span class="text-center ganancia-col">Ganancia</span>
+                </div>
+
+                <!-- Productos -->
+                <!-- Producto 1 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Pirujos grandes</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Pirujitos</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Tostados</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Pan dulce</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="3">
+                    <span class="text-center precio-item text-base precio-col" data-price="2.40">Q2.40</span>
+                    <span class="text-left">Francés</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 6 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Pan grande</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 7 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Zepelines</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 8 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="5">
+                    <span class="text-center precio-item text-base precio-col" data-price="3.75">Q3.75</span>
+                    <span class="text-left">Filas de galleta</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 9 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="12">
+                    <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
+                    <span class="text-left">Champurradas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 10 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="12">
+                    <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
+                    <span class="text-left">Champurradas integrales</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Fila de totales -->
+                <div
+                    class="total-row grid grid-cols-5 responsive-grid items-center text-lg py-2 border-t border-gray-600 mt-2">
+                    <span class="col-span-2 text-left font-bold text-base">Total</span>
+                    <span class="precio-col"></span>
+                    <span class="text-center total-subtotal font-bold text-lg text-[#fc3dff] pr-2">Q0</span>
+                    <span class="text-center total-ganancia font-bold text-lg text-[#c3ff3d] ganancia-col">Q0</span>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <!-- Vista de la tarde (inicialmente oculta) -->
+        <div id="tarde-view" class="hidden p-0">
+            <div class="flex flex-col gap-0">
+                <!-- Headers de la lista -->
+                <div
+                    class="grid grid-cols-5 responsive-grid items-center text-sm text-gray-400 font-medium pb-1 border-b border-gray-600">
+                    <span class="text-center precio-col">Precio</span>
+                    <span class="text-left">Producto</span>
+                    <span class="text-center">Cantidad</span>
+                    <span class="text-center">Subtotal</span>
+                    <span class="text-center ganancia-col">Ganancia</span>
+                </div>
+
+                <!-- Productos -->
+                <!-- Producto 1 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Campechanas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Lenguas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Pirujos grandes</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Pan grande</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Cortadas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 6 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Zepelines</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 7 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Tostados</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 8 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Pan dulce</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 9 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Pirujitos</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 10 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="3">
+                    <span class="text-center precio-item text-base precio-col" data-price="2.40">Q2.40</span>
+                    <span class="text-left">Francés</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 11 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="5">
+                    <span class="text-center precio-item text-base precio-col" data-price="3.75">Q3.75</span>
+                    <span class="text-left">Filas de galleta</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 12 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Bollos</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 13 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1">Q1</span>
+                    <span class="text-left">Bocados</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 14 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Pan integral</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 15 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="3.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
+                    <span class="text-left">Empanadas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 16 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Encanelados</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 17 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Trenzas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 18 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Palitos</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 19 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.25">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Cemitas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 20 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="1.25">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.25">Q1.25</span>
+                    <span class="text-left">Polvorosas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 21 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="3.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
+                    <span class="text-left">Donas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 22 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="3.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="3">Q3</span>
+                    <span class="text-left">Cubilete de queso</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 23 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="2">
+                    <span class="text-center precio-item text-base precio-col" data-price="1.50">Q1.50</span>
+                    <span class="text-left">Cubilete de chocolate</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 24 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="12">
+                    <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
+                    <span class="text-left">Champurradas</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 25 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="12">
+                    <span class="text-center precio-item text-base precio-col" data-price="8.50">Q8.50</span>
+                    <span class="text-left">Champurradas integrales</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Producto 26 -->
+                <div class="product-row grid grid-cols-5 responsive-grid items-center text-lg py-1 border-b border-gray-600"
+                    data-profit-multiplier="0.5">
+                    <span class="text-center precio-item text-base precio-col" data-price="0.40">Q0.40</span>
+                    <span class="text-left">Molletes</span>
+                    <div class="flex justify-center">
+                        <input type="number" placeholder="" min="1"
+                            class="cantidad-input w-12 h-12 text-center bg-gray-900 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer" />
+                    </div>
+                    <span class="text-center subtotal-item font-semibold" data-subtotal="0">Q0</span>
+                    <span class="text-center ganancia-item font-semibold ganancia-col" data-ganancia="0">Q0</span>
+                </div>
+
+                <!-- Fila de totales -->
+                <div
+                    class="total-row grid grid-cols-5 responsive-grid items-center text-lg py-2 border-t border-gray-600 mt-2">
+                    <span class="col-span-2 text-left font-bold text-base">Total</span>
+                    <span class="precio-col"></span>
+                    <span class="text-center total-subtotal font-bold text-lg text-[#fc3dff] pr-2">Q0</span>
+                    <span class="text-center total-ganancia font-bold text-lg text-[#c3ff3d] ganancia-col">Q0</span>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <!-- Vista de años (nueva, inicialmente oculta) -->
+        <div id="year-view" class="hidden p-0 mt-6">
+            <h2 class="text-2xl font-bold mb-4 text-center">Ganancias anuales</h2>
+            <div class="flex flex-col gap-2" id="year-list">
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer year-item"
+                    data-year="2025">
+                    <span class="font-medium">2025</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer year-item"
+                    data-year="2026">
+                    <span class="font-medium">2026</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer year-item"
+                    data-year="2027">
+                    <span class="font-medium">2027</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer year-item"
+                    data-year="2028">
+                    <span class="font-medium">2028</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+            </div>
+            <button id="back-from-years-btn"
+                class="hidden mt-4 px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Volver</button>
+        </div>
+
+        <!-- Vista del historial (inicialmente oculta) -->
+        <div id="historial-view" class="hidden p-0 mt-6">
+            <h2 id="monthly-title" class="text-2xl font-bold mb-4 text-center"></h2>
+            <div class="flex flex-col gap-2" id="monthly-list">
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Enero" data-month-index="0">
+                    <span class="font-medium">Enero</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Febrero" data-month-index="1">
+                    <span class="font-medium">Febrero</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Marzo" data-month-index="2">
+                    <span class="font-medium">Marzo</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Abril" data-month-index="3">
+                    <span class="font-medium">Abril</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Mayo" data-month-index="4">
+                    <span class="font-medium">Mayo</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Junio" data-month-index="5">
+                    <span class="font-medium">Junio</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Julio" data-month-index="6">
+                    <span class="font-medium">Julio</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Agosto" data-month-index="7">
+                    <span class="font-medium">Agosto</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Septiembre" data-month-index="8">
+                    <span class="font-medium">Septiembre</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Octubre" data-month-index="9">
+                    <span class="font-medium">Octubre</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Noviembre" data-month-index="10">
+                    <span class="font-medium">Noviembre</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer month-item"
+                    data-month="Diciembre" data-month-index="11">
+                    <span class="font-medium">Diciembre</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+            </div>
+            <button id="back-to-years-btn"
+                class="mt-4 px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Volver</button>
+        </div>
+
+        <!-- Vista de la semana (inicialmente oculta) -->
+        <div id="weekly-view" class="hidden p-0 mt-6">
+            <h2 id="weekly-title" class="text-2xl font-bold mb-4 text-center"></h2>
+            <div class="flex flex-col gap-2" id="weekly-list">
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer week-item"
+                    data-week="1">
+                    <span class="font-medium">Semana 1</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer week-item"
+                    data-week="2">
+                    <span class="font-medium">Semana 2</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer week-item"
+                    data-week="3">
+                    <span class="font-medium">Semana 3</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer week-item"
+                    data-week="4">
+                    <span class="font-medium">Semana 4</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer week-item"
+                    data-week="5">
+                    <span class="font-medium">Semana 5</span>
+                    <span class="font-bold text-lg text-[#c3ff3d]">Q0</span>
+                </div>
+            </div>
+            <button id="back-to-months-btn"
+                class="mt-4 px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Volver</button>
+        </div>
+
+        <!-- Vista de los días (nueva, inicialmente oculta) -->
+        <div id="day-view" class="hidden p-0 mt-6">
+            <h2 id="day-title" class="text-2xl font-bold mb-4 text-center"></h2>
+            <div class="flex flex-col gap-2" id="day-list">
+                <!-- Los días se generarán dinámicamente aquí -->
+            </div>
+            <button id="back-to-weeks-btn"
+                class="mt-4 px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Volver</button>
+        </div>
+
+        </div>
+
+    <!-- Nuevo Modal de Confirmación para Guardar -->
+    <div id="confirm-save-modal" class="modal modal-anim-in">
+        <div class="modal-container modal-box-in">
+            <div class="modal-content text-white flex flex-col items-center">
+                <h2 class="text-2xl font-bold mb-4">¿Guardar los datos?</h2>
+                <p class="text-sm text-gray-400 mb-8 text-center">Si ya había datos guardados del día de hoy, se
+                    reemplazarán por los datos actuales.</p>
+                <div class="flex gap-4">
+                    <button id="confirm-save-btn"
+                        class="px-6 py-2 rounded-full font-medium bg-[#c3ff3d] text-black transition duration-300">
+                        Guardar
+                    </button>
+                    <button id="cancel-save-btn"
+                        class="px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 active:bg-gray-600 transition duration-300">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <p id="hint"><i class="fa-solid fa-hand-pointer" style="margin-right:6px"></i>Toque la carta para abrirla</p>
-</div>
 
-<canvas id="confetti-canvas"></canvas>
-
-<div id="app">
-  <div id="slider">
-
-    <section class="sec" id="s0">
-      <span class="deco" style="top:15%;left:10%;color:var(--deep)">✦</span>
-      <span class="deco" style="top:25%;right:15%;color:var(--pink-accent)">❀</span>
-      <span class="deco" style="bottom:20%;left:20%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:30%;right:10%;color:var(--coral)">❋</span>
-      <div class="sec-c">
-        <p class="rv" style="font-size:.85rem;letter-spacing:4px;text-transform:uppercase;color:var(--deep);font-weight:600">Está invitado/a</p>
-        <h1 class="rv tg fl" style="font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.05;margin:16px 0">A MI CUMPLEAÑOS</h1>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1rem,3vw,1.3rem);color:var(--dark-berry)">Celebre conmigo un año más de vida</p>
-      </div>
-    </section>
-
-    <section class="sec" id="s1">
-      <span class="deco" style="top:20%;left:12%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:25%;right:12%;color:var(--pink-accent)">✦</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-heart"></i></div>
-        <h2 class="stit rv tg fl">Con todo nuestro amor</h2>
-        <div class="divd rv"></div>
-        <p class="ssub rv">Tenemos el honor de invitarle a celebrar</p>
-        <p class="rv" style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.15rem;color:var(--deep);margin-bottom:24px">la vida de nuestra querida hija</p>
-        <div class="hcard rv" style="max-width:320px;margin:0 auto">
-          <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:3px;color:var(--deep);margin-bottom:12px;font-weight:600">Le invitan</p>
-          <div style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap">
-            <div><p style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark-berry)">Isabel Yax</p><p style="font-size:.7rem;color:var(--deep)">Madre</p></div>
-            <span style="color:var(--deep);font-size:1.2rem">&  </span>
-            <div><p style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark-berry)">Emilio</p><p style="font-size:.7rem;color:var(--deep)">Padre</p></div>
-          </div>
+        <!-- Nuevo Modal de Confirmación para Borrar -->
+    <div id="confirm-delete-modal" class="modal modal-anim-in">
+        <div class="modal-container modal-box-in">
+            <div class="modal-content text-white flex flex-col items-center">
+                <h2 class="text-2xl font-bold mb-4">¿Borrar las cantidades?</h2>
+                <p class="text-sm text-gray-400 mb-8 text-center">Se borrarán las cantidades de <span id="delete-modal-view" class="font-bold text-white"></span>. Esta acción no se puede deshacer.</p>
+                <div class="flex gap-4">
+                    <button id="confirm-delete-btn" class="px-6 py-2 rounded-full font-medium bg-[#fc3dff] text-black focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-300">
+                        Borrar
+                    </button>
+                    <button id="cancel-delete-btn" class="px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 active:bg-gray-600 transition duration-300">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
 
-    <section class="sec" id="s2">
-      <span class="deco" style="top:18%;left:15%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:22%;right:18%;color:var(--coral)">✦</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-calendar-days"></i></div>
-        <h2 class="stit rv tg fl">Fecha y Hora</h2>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:700;color:var(--dark-berry)">15 de Junio, 2026</p>
-        <p class="rv" style="font-size:1.15rem;color:var(--deep);font-weight:700;margin-top:4px">8:00 P.M.</p><br>
-        <p class="rv" style="font-size:.8rem;color:var(--dark-berry);opacity:0.6;font-style:italic">QUEDAN</p>
-        <div class="cd-g rv">
-          <div class="cd-b"><div class="cd-n" id="cd-d">00</div><div class="cd-l">Días</div></div>
-          <div class="cd-b"><div class="cd-n" id="cd-h">00</div><div class="cd-l">Horas</div></div>
-          <div class="cd-b"><div class="cd-n" id="cd-m">00</div><div class="cd-l">Min</div></div>
-          <div class="cd-b"><div class="cd-n" id="cd-s">00</div><div class="cd-l">Seg</div></div>
+
+    <!-- Modal para el Pago -->
+    <div id="resumen-modal" class="modal modal-anim-in">
+        <!-- El modal-container maneja el centrado y el ancho máximo en desktop -->
+        <div class="modal-container modal-box-in">
+            <!-- Se utiliza modal-content con el borde recto y sin redondeo -->
+            <div class="modal-content text-white flex flex-col items-center">
+                <h2 class="text-2xl font-bold mb-8">Pago del día</h2>
+
+                <!-- Contenedor del spinner -->
+                <div id="modal-spinner" class="flex justify-center items-center h-24">
+                    <div class="animate-spin-custom-sm"></div>
+                </div>
+
+                <!-- Contenedor del resumen (inicialmente oculto) -->
+                <div id="resumen-data" class="hidden w-full max-w-xs">
+                    <div class="flex flex-col gap-6 items-center w-full px-4">
+                        <span id="pago-total" class="font-bold text-4xl neon-pink text-center">Q0</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
 
-    <section class="sec" id="s3">
-      <span class="deco" style="top:22%;left:10%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:18%;right:12%;color:var(--pink-accent)">✦</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-location-dot"></i></div>
-        <h2 class="stit rv tg fl">Ubicación</h2>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark-berry)">Salón en Villa Hermosa</p>
-        <p class="rv" style="font-size:.95rem;color:var(--deep);font-weight:500">San Miguel Petapa</p>
-        <p class="rv" style="font-size:.8rem;color:var(--dark-berry);opacity:0.7;margin-top:4px;margin-bottom:24px">¡Le esperamos en este lugar tan especial!</p>
-        <a href="https://maps.app.goo.gl/Pb8rkkvrtrutLdxz8" target="_blank" rel="noopener" class="btn btn-pink rv"><i class="fa-solid fa-map"></i> Ver mapa</a>
-      </div>
-    </section>
+    <script>
 
-    <section class="sec" id="s4">
-      <span class="deco" style="top:20%;left:12%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:25%;right:10%;color:var(--pink-accent)">❋</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-gift"></i></div>
-        <h2 class="stit rv tg fl">Regalos</h2>
-        <div class="divd rv"></div>
-        <div class="hcard rv" style="max-width:440px;margin:10px auto 0;background:rgba(255,255,255,0.85);border:1px solid rgba(233,30,99,0.15)">
-          <p class="rv" style="font-size:1.05rem;color:var(--dark-berry);line-height:1.7;font-family:'Playfair Display',serif;font-style:italic">
-            "Su presencia es el mejor regalo que puedo recibir. Lo más importante es contar con su valiosa compañía para celebrar juntos este día tan especial."
-          </p>
-        </div>
-      </div>
-    </section>
+        // --- INICIO: Utilidades de formato de quetzales ---
+        const qsymbol = '<span class="quetzal-symbol">Q</span>';
 
-    <section class="sec" id="s5">
-      <span class="deco" style="top:22%;left:15%;color:#25d366">✦</span>
-      <span class="deco" style="bottom:20%;right:15%;color:var(--deep)">✦</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="background:linear-gradient(135deg,rgba(37,211,102,.1),rgba(18,140,126,.05));color:#25d366"><i class="fa-solid fa-circle-check"></i></div>
-        <h2 class="stit rv tg fl">Confirme su asistencia</h2>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-size:.9rem;color:var(--dark-berry);line-height:1.7;font-weight:500;margin-bottom:14px">No nos gustaría que se quede fuera. ¡Confirme por favor que va a estar presente para reservar su lugar!</p>
-        <a href="https://wa.me/50258965767?text=Estoy%20agradecido%20de%20ser%20invitado%20al%20cumplea%C3%B1os%20de%20M%C3%B3nica%2C%20ah%C3%AD%20estar%C3%A9" target="_blank" rel="noopener" class="btn btn-green rv" style="margin-top:8px"><i class="fa-brands fa-whatsapp"></i> Confirmar asistencia</a>
-      </div>
-    </section>
+        function moneyHTML(value) {
+            const num = Number(value) || 0;
+            const fixed = num.toFixed(2);
+            const [whole, dec] = fixed.split('.');
+            return `${qsymbol}${Number(whole).toLocaleString('es-GT')}<span class="money-decimals">.${dec}</span>`;
+        }
 
-    <section class="sec" id="s6">
-      <span class="deco" style="top:15%;right:12%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:22%;left:12%;color:var(--pink-accent)">❀</span>
-      <div class="sec-c">
-        <div class="icirc rv" style="color:var(--deep)"><i class="fa-solid fa-bookmark"></i></div>
-        <h2 class="stit rv tg fl">Su recuerdo</h2>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-size:.85rem;color:var(--dark-berry);opacity:0.85;margin-bottom:16px">Escriba su nombre y descargue un recuerdo especial de esta invitación</p>
-        <div class="souvenir-card rv">
-          <p style="font-family:'Playfair Display',serif;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:var(--deep);font-weight:700;margin-bottom:16px">Invitación especial</p>
-          <input type="text" class="souvenir-input" id="souvName" placeholder="Escriba su nombre aquí" maxlength="30">
-          <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--deep),transparent);margin:16px auto"></div>
-          <p style="font-size:.75rem;color:var(--dark-berry);font-weight:600;margin-top:4px">15 de Junio · 8:00 P.M.</p>
-          <p style="font-size:.7rem;color:var(--dark-berry);opacity:0.7;margin-top:2px">Villa Hermosa, San Miguel Petapa</p>
-        </div>
-        <button class="btn btn-pink rv" style="margin-top:20px" onclick="downloadSouvenir()"><i class="fa-solid fa-download"></i> Descargar recuerdo</button>
-      </div>
-    </section>
+        function moneyHTMLLocal(value) {
+            return moneyHTML(value);
+        }
 
-    <section class="sec" id="s7">
-      <span class="deco" style="top:18%;left:10%;color:var(--deep)">❀</span>
-      <span class="deco" style="top:25%;right:12%;color:var(--pink-accent)">✦</span>
-      <span class="deco" style="bottom:20%;left:20%;color:var(--deep)">✦</span>
-      <span class="deco" style="bottom:15%;right:15%;color:var(--dark-berry)">❋</span>
-      <div class="sec-c">
-        <p class="rv" style="font-size:3rem;margin-bottom:10px">🎉</p>
-        <h2 class="stit rv tg fl">¡Nos vemos ahí!</h2>
-        <div class="divd rv"></div>
-        <p class="rv" style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--dark-berry);line-height:1.7;max-width:420px;margin:0 auto">Este día no sería lo mismo sin usted. Gracias por ser parte de mi vida y por acompañarme a celebrar un año más.</p>
-        <p class="rv" style="margin-top:24px;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--deep)">Con cariño, los padres de Mónica</p>
-        <button class="btn btn-outline-pink rv" style="margin-top:40px" onclick="resetInvitation()"><i class="fa-solid fa-rotate-left"></i> Comenzar de nuevo</button>
-      </div>
-    </section>
+        // Envuelve la "Q" inicial de cualquier nodo de texto para darle fuente propia
+        // y levanta los decimales finales a superíndice (formato Q1.25 → Q1^.25)
+        function wrapQuetzal(parent) {
+            Array.from(parent.childNodes).forEach(node => {
+                if (node.nodeType !== 3) return;
+                let text = node.textContent;
 
-  </div>
-</div>
+                if (text.charAt(0) === 'Q') {
+                    const span = document.createElement('span');
+                    span.className = 'quetzal-symbol';
+                    span.textContent = 'Q';
+                    parent.insertBefore(span, node);
+                    text = text.substring(1);
+                }
 
-<button id="nextBtn"><i class="fa-solid fa-chevron-down"></i></button>
+                const dm = text.match(/\.\d+$/);
+                if (dm) {
+                    const intPart = text.slice(0, dm.index);
+                    const decPart = text.slice(dm.index + 1);
+                    const intText = document.createTextNode(intPart);
+                    const sup = document.createElement('span');
+                    sup.className = 'money-decimals';
+                    sup.textContent = '.' + decPart;
+                    parent.insertBefore(intText, node);
+                    parent.insertBefore(sup, node);
+                    node.remove();
+                } else if (text) {
+                    node.textContent = text;
+                }
+            });
+        }
 
-<div id="scrollHint"><i class="fa-solid fa-hand-pointer" style="margin-right:6px"></i>Toque la flecha para continuar</div>
+        function wrapAllQuetzals() {
+            document.querySelectorAll('.precio-item, .subtotal-item, .ganancia-item, .total-subtotal, .total-ganancia').forEach(el => wrapQuetzal(el));
+            const yearItems = document.querySelectorAll('.year-item span.font-bold, .month-item span.font-bold, .week-item span.font-bold, .day-item span.font-bold');
+            yearItems.forEach(el => wrapQuetzal(el));
+        }
+        // --- FIN: Utilidades de formato de quetzales ---
 
-<nav class="nav-dots" id="navDots">
-  <button class="ndot act" data-i="0"></button>
-  <button class="ndot" data-i="1"></button>
-  <button class="ndot" data-i="2"></button>
-  <button class="ndot" data-i="3"></button>
-  <button class="ndot" data-i="4"></button>
-  <button class="ndot" data-i="5"></button>
-  <button class="ndot" data-i="6"></button>
-  <button class="ndot" data-i="7"></button>
-</nav>
+        // --- INICIO: Configuración e inicialización de Firebase ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAqo_o5VMapMOjlAH0yHKsQkrc3OH9LEM",
+            authDomain: "venpaspruebas.firebaseapp.com",
+            databaseURL: "https://venpaspruebas-default-rtdb.firebaseio.com",
+            projectId: "venpaspruebas",
+            storageBucket: "venpaspruebas.firebasestorage.app",
+            messagingSenderId: "288965411473",
+            appId: "1:288965411473:web:0d2458c74f3345530cf530",
+            measurementId: "G-5GTQW95WJ5"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // --- FIN: Configuración e inicialización de Firebase ---
 
-<script>
-const overlay = document.getElementById('overlay');
-const envelope = document.getElementById('envelope');
-const hint = document.getElementById('hint');
-const app = document.getElementById('app');
-const slider = document.getElementById('slider');
-const navDotsEl = document.getElementById('navDots');
-const dots = document.querySelectorAll('.ndot');
-const nextBtn = document.getElementById('nextBtn');
-const scrollHint = document.getElementById('scrollHint');
-const sections = document.querySelectorAll('.sec');
-const totalSections = sections.length;
-let currentSection = 0;
-let isAnimating = false;
-let envelopeOpened = false;
-let hintTimer;
-let scrollHintTimer;
+        // Función para obtener el nombre de la vista (manana/tarde)
+        function getViewName(viewElement) {
+            if (viewElement.id === 'manana-view') return 'manana';
+            if (viewElement.id === 'tarde-view') return 'tarde';
+            return 'otros';
+        }
 
-const bgCanvas = document.getElementById('bg-canvas');
-const bgCtx = bgCanvas.getContext('2d');
-let particles = [];
-function resizeBgCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
-resizeBgCanvas(); 
+        // Función para guardar cantidades de productos en Firestore
+        async function saveProductQuantities(viewElement) {
+            const viewName = getViewName(viewElement);
+            const rows = viewElement.querySelectorAll('.product-row');
+            const data = {};
+            rows.forEach((row, idx) => {
+                const input = row.querySelector('.cantidad-input');
+                if (input && input.value !== "") {
+                    data[idx] = Number(input.value);
+                } // Si está vacío, no se guarda nada para ese índice
+            });
+            try {
+                await db.collection('ventas').doc(viewName).set(data);
+            } catch (e) {
+                console.error('Error guardando cantidades en Firestore:', e);
+            }
+        }
 
-// Aquí metimos el debounce del resize para que no laggee
-let resizeTmr;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTmr);
-  resizeTmr = setTimeout(() => {
-    resizeBgCanvas(); 
-    confCanvas.width = window.innerWidth; 
-    confCanvas.height = window.innerHeight;
-  }, 200);
-});
+        // Función para cargar cantidades de productos desde Firestore
+        async function loadProductQuantities(viewElement) {
+            const viewName = getViewName(viewElement);
+            try {
+                const doc = await db.collection('ventas').doc(viewName).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    const rows = viewElement.querySelectorAll('.product-row');
+                    rows.forEach((row, idx) => {
+                        const input = row.querySelector('.cantidad-input');
+                        if (input) {
+                            if (data[idx] === undefined || data[idx] === null || data[idx] === "") {
+                                input.value = "";
+                            } else {
+                                input.value = data[idx];
+                            }
+                            // Disparar evento input para actualizar subtotales
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error('Error cargando cantidades de Firestore:', e);
+            }
+        }
 
-class Particle {
-  constructor() { this.reset(); }
-  reset() { 
-    this.x = Math.random() * bgCanvas.width; 
-    this.y = Math.random() * bgCanvas.height; 
-    this.size = Math.random() * 2 + 0.5; 
-    this.speedX = (Math.random() - 0.5) * 0.3; 
-    this.speedY = (Math.random() - 0.5) * 0.3; 
-    this.color = ['#e91e63', '#ffffff', '#ffd700', '#ff80ab'][Math.floor(Math.random() * 4)]; 
-  }
-  update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > bgCanvas.width || this.y < 0 || this.y > bgCanvas.height) this.reset(); }
-  draw() { bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); bgCtx.fillStyle = this.color; bgCtx.fill(); }
-}
-// Bajamos de 80 a 35 partículas, el performance te lo va a agradecer
-for (let i = 0; i < 35; i++) particles.push(new Particle());
-function animateParticles() {
-  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-  particles.forEach(p => { p.update(); p.draw(); });
-  for (let a = 0; a < particles.length; a++) { 
-    for (let b = a + 1; b < particles.length; b++) { 
-      const dx = particles[a].x - particles[b].x; 
-      const dy = particles[a].y - particles[b].y; 
-      const dist = Math.sqrt(dx * dx + dy * dy); 
-      if (dist < 100) { 
-        bgCtx.beginPath(); 
-        bgCtx.strokeStyle = `rgba(233, 30, 99, ${0.08 * (1 - dist / 100)})`; 
-        bgCtx.lineWidth = 0.5; 
-        bgCtx.moveTo(particles[a].x, particles[a].y); 
-        bgCtx.lineTo(particles[b].x, particles[b].y); 
-        bgCtx.stroke(); 
-      } 
-    } 
-  }
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- INICIO: Mostrar historial desde Firestore ---
+            // Cargar totales de años
+            async function loadYearTotals() {
+                const yearList = document.getElementById('year-list');
+                const yearItems = yearList.querySelectorAll('.year-item');
+                for (const item of yearItems) {
+                    const year = item.dataset.year;
+                    let total = 0;
+                    // Sumar los totales de todos los meses del año
+                    const mesesSnap = await db.collection('historial').doc(year).collection('meses').get();
+                    if (mesesSnap.size > 0) {
+                        for (const mesDoc of mesesSnap.docs) {
+                            const data = mesDoc.data();
+                            if (data && data.totalGanancia) total += data.totalGanancia;
+                        }
+                    } else {
+                        // Fallback: sumar todas las ganancias de todos los días del año si no hay documentos de mes
+                        for (let m = 1; m <= 12; m++) {
+                            for (let w = 1; w <= 5; w++) {
+                                const diasSnap = await db.collection('historial').doc(year).collection(`${m}`).doc(`sem${w}`).collection('dias').get();
+                                for (const diaDoc of diasSnap.docs) {
+                                    const data = diaDoc.data();
+                                    if (data && data.totalGanancia) total += data.totalGanancia;
+                                }
+                            }
+                        }
+                    }
+                    item.querySelector('span.font-bold').innerHTML = moneyHTMLLocal(total);
+                }
+            }
 
-document.addEventListener('click', (e) => {
-  if (e.target.closest('button, a, input')) return;
-  const emojis = ['✦', '❤', '✨', '🌸', '💫'];
-  for (let i = 0; i < 6; i++) {
-    const spark = document.createElement('span'); spark.className = 'click-sparkle'; spark.innerText = emojis[Math.floor(Math.random() * emojis.length)]; spark.style.left = e.clientX + 'px'; spark.style.top = e.clientY + 'px'; spark.style.fontSize = (14 + Math.random() * 16) + 'px';
-    document.body.appendChild(spark);
-    gsap.to(spark, { x: (Math.random() - 0.5) * 140, y: (Math.random() - 0.5) * 140 - 40, opacity: 0, scale: Math.random() * 1.5 + 0.5, rotation: (Math.random() - 0.5) * 90, duration: 0.8 + Math.random() * 0.4, ease: "power2.out", onComplete: () => spark.remove() });
-  }
-});
+            // Cargar totales de meses para un año
+            async function loadMonthTotals(year) {
+                const monthlyList = document.getElementById('monthly-list');
+                const monthItems = monthlyList.querySelectorAll('.month-item');
+                for (const item of monthItems) {
+                    const month = item.dataset.monthIndex ? (parseInt(item.dataset.monthIndex) + 1) : 1;
+                    let total = 0;
+                    // Sumar todas las ganancias de todos los días del mes
+                    for (let w = 1; w <= 5; w++) {
+                        const diasSnap = await db.collection('historial').doc(year).collection(`${month}`).doc(`sem${w}`).collection('dias').get();
+                        for (const diaDoc of diasSnap.docs) {
+                            const data = diaDoc.data();
+                            if (data && data.totalGanancia) total += data.totalGanancia;
+                        }
+                    }
+                    item.querySelector('span.font-bold').innerHTML = moneyHTMLLocal(total);
+                }
+            }
 
-const colors = ['#ffd700', '#ff4081', '#fce4ec', '#ffffff'];
-for (let i = 0; i < 60; i++) { const s = document.createElement('div'); s.className = 'o-star'; s.style.cssText = `width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%4]};animation:twk ${2+Math.random()*4}s ease-in-out infinite alternate;animation-delay:${Math.random()*5}s`; overlay.appendChild(s); }
-function startHintTimer() { clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (!envelopeOpened) hint.classList.add('vis'); }, 5000); }
-startHintTimer();
+            // Cargar totales de semanas para un mes
+            async function loadWeekTotals(year, month) {
+                const weeklyList = document.getElementById('weekly-list');
+                const weekItems = weeklyList.querySelectorAll('.week-item');
+                for (const item of weekItems) {
+                    const week = item.dataset.week;
+                    let total = 0;
+                    // Sumar todas las ganancias de los días de la semana
+                    const diasSnap = await db.collection('historial').doc(year).collection(`${month}`).doc(`sem${week}`).collection('dias').get();
+                    for (const diaDoc of diasSnap.docs) {
+                        const data = diaDoc.data();
+                        if (data && data.totalGanancia) total += data.totalGanancia;
+                    }
+                    item.querySelector('span.font-bold').innerHTML = moneyHTMLLocal(total);
+                }
+            }
 
-function startScrollHintTimer() {
-  clearTimeout(scrollHintTimer);
-  if (currentSection === 0) {
-    scrollHintTimer = setTimeout(() => {
-      if (currentSection === 0 && envelopeOpened) {
-        scrollHint.classList.add('vis');
-      }
-    }, 5000);
-  }
-}
+            // Cargar totales de días para una semana
+            async function loadDayTotals(year, month, week) {
+                const dayList = document.getElementById('day-list');
+                const dayItems = dayList.querySelectorAll('.day-item');
+                for (const item of dayItems) {
+                    const dayText = item.querySelector('span.font-medium').textContent;
+                    // Extraer el número de día del texto (ej: "Lunes 25")
+                    const match = dayText.match(/\b(\d{1,2})\b$/);
+                    if (!match) continue;
+                    const day = match[1];
+                    const dayId = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const doc = await db.collection('historial').doc(year).collection(`${month}`).doc(`sem${week}`).collection('dias').doc(dayId).get();
+                    let total = 0;
+                    if (doc.exists && doc.data().totalGanancia) {
+                        total = doc.data().totalGanancia;
+                    }
+                    item.querySelector('span.font-bold').innerHTML = moneyHTMLLocal(total);
+                }
+            }
 
-function hideScrollHint() {
-  clearTimeout(scrollHintTimer);
-  scrollHint.classList.remove('vis');
-}
+            // Llamar al cargar la página
+            loadYearTotals();
+            wrapAllQuetzals();
+            // --- FIN: Mostrar historial desde Firestore ---
 
-function openEnvelope() {
-  if (envelopeOpened) return; envelopeOpened = true; clearTimeout(hintTimer); hint.classList.remove('vis'); envelope.classList.add('opening');
-  
-  const music = document.getElementById('bg-music');
-  if (music) {
-    music.play().catch(err => console.log("El navegador requería acción de usuario para reproducir audio:", err));
-  }
+            const btnManana = document.getElementById('btn-manana');
+            const btnTarde = document.getElementById('btn-tarde');
+            const btnPago = document.getElementById('btn-pago');
+            const toggleSwitch = document.getElementById('toggle-view-switch');
+            // Cargar cantidades desde Firestore al cargar la página
+            loadProductQuantities(document.getElementById('manana-view'));
+            loadProductQuantities(document.getElementById('tarde-view'));
+            const btnHistorial = document.querySelector('.btn-historial');
+            const mananaView = document.getElementById('manana-view');
+            const tardeView = document.getElementById('tarde-view');
+            const yearView = document.getElementById('year-view');
+            const historialView = document.getElementById('historial-view');
+            const weeklyView = document.getElementById('weekly-view');
+            const dayView = document.getElementById('day-view');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const mainContainer = document.querySelector('.bg-black');
+            const resumenModal = document.getElementById('resumen-modal');
+            const modalSpinner = document.getElementById('modal-spinner');
+            const resumenData = document.getElementById('resumen-data');
+            const pagoTotalSpan = document.getElementById('pago-total');
+            const body = document.body;
+            const confirmSaveModal = document.getElementById('confirm-save-modal'); // Nuevo
+            const confirmSaveBtn = document.getElementById('confirm-save-btn'); // Nuevo
+            const cancelSaveBtn = document.getElementById('cancel-save-btn'); // Nuevo
+                        // Nuevas constantes para el botón y modal de borrar
+            const confirmDeleteModal = document.getElementById('confirm-delete-modal'); // Nuevo
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn'); // Nuevo
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn'); // Nuevo
+            const deleteModalViewSpan = document.getElementById('delete-modal-view');
 
-  setTimeout(launchConfetti, 600);
-  setTimeout(() => {
-    gsap.to(overlay, { opacity: 0, duration: 1, pointerEvents: 'none' });
-    gsap.to(app, { opacity: 1, duration: 0.8 });
-    navDotsEl.classList.add('vis'); nextBtn.classList.add('show');
-    initGSAP(); 
-    animateSectionIn(0);
-    startScrollHintTimer(); 
-  }, 1600);
-}
+            const togglePrecioBtns = document.querySelectorAll('.toggle-precio-btn');
+            const toggleGananciaBtns = document.querySelectorAll('.toggle-ganancia-btn');
+            const yearList = document.getElementById('year-list');
+            const monthlyTitle = document.getElementById('monthly-title');
+            const monthlyList = document.getElementById('monthly-list');
+            const weeklyList = document.getElementById('weekly-list');
+            const dayList = document.getElementById('day-list');
+            const weeklyTitle = document.getElementById('weekly-title');
+            const dayTitle = document.getElementById('day-title');
+            const backToYearsBtn = document.getElementById('back-to-years-btn');
+            const backToMonthsBtn = document.getElementById('back-to-months-btn');
+            const backToWeeksBtn = document.getElementById('back-to-weeks-btn');
 
-document.addEventListener('visibilitychange', () => {
-  const music = document.getElementById('bg-music');
-  if (!music) return;
-  if (document.hidden) {
-    music.pause();
-  } else {
-    if (envelopeOpened) {
-      music.play().catch(err => console.log("La reproducción automática en reingreso falló:", err));
-    }
-  }
-});
+            let currentYear = 0;
+            let currentMonthName = '';
+            let currentMonthIndex = 0;
+            let currentWeekNumber = 0;
 
-const confCanvas = document.getElementById('confetti-canvas');
-const confCtx = confCanvas.getContext('2d');
-confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight;
-const confParts = []; const confColors = ['#ff4081', '#ffd700', '#f8bbd0', '#e91e63', '#ffffff'];
-function launchConfetti() { for (let i = 0; i < 200; i++) { confParts.push({ x: confCanvas.width/2, y: confCanvas.height/2, vx: (Math.random()-.5)*20, vy: -8-Math.random()*14, w: 4+Math.random()*6, h: 3+Math.random()*4, color: confColors[Math.floor(Math.random()*5)], rot: Math.random()*Math.PI*2, rv: (Math.random()-.5)*0.3, gravity: 0.12+Math.random()*0.08, opacity: 1 }); } animConf(); }
-function animConf() { confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height); let alive = false; confParts.forEach(p => { if (p.opacity <= 0) return; alive = true; p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.99; p.rot += p.rv; if (p.y > confCanvas.height + 20) { p.opacity = 0; return; } if (p.y > confCanvas.height * 0.7) p.opacity -= 0.02; confCtx.save(); confCtx.translate(p.x, p.y); confCtx.rotate(p.rot); confCtx.globalAlpha = Math.max(0, p.opacity); confCtx.fillStyle = p.color; confCtx.fillRect(-p.w/2, -p.h/2, p.w, p.h); confCtx.restore(); }); if (alive) requestAnimationFrame(animConf); }
+            const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-const targetDate = new Date(Date.UTC(2026, 5, 16, 2, 0, 0)).getTime();
+            const updateViewTotals = (viewElement) => {
+                let totalSubtotal = 0;
+                let totalGanancia = 0;
 
-function updateCountdown() {
-  const now = new Date().getTime();
-  const diff = targetDate - now;
+                const subtotalItems = viewElement.querySelectorAll('.subtotal-item');
+                subtotalItems.forEach(item => {
+                    const value = parseFloat(item.dataset.subtotal) || 0;
+                    totalSubtotal += value;
+                });
 
-  if (diff <= 0) {
-    document.getElementById('cd-d').innerText = "00";
-    document.getElementById('cd-h').innerText = "00";
-    document.getElementById('cd-m').innerText = "00";
-    document.getElementById('cd-s').innerText = "00";
-    return;
-  }
+                const gananciaItems = viewElement.querySelectorAll('.ganancia-item');
+                gananciaItems.forEach(item => {
+                    const value = parseFloat(item.dataset.ganancia) || 0;
+                    totalGanancia += value;
+                });
 
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const s = Math.floor((diff % (1000 * 60)) / 1000);
+                const totalSubtotalSpan = viewElement.querySelector('.total-subtotal');
+                const totalGananciaSpan = viewElement.querySelector('.total-ganancia');
 
-  document.getElementById('cd-d').innerText = d < 10 ? "0" + d : d;
-  document.getElementById('cd-h').innerText = h < 10 ? "0" + h : h;
-  document.getElementById('cd-m').innerText = m < 10 ? "0" + m : m;
-  document.getElementById('cd-s').innerText = s < 10 ? "0" + s : s;
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
+                totalSubtotalSpan.innerHTML = moneyHTML(totalSubtotal);
+                totalGananciaSpan.innerHTML = moneyHTML(totalGanancia);
 
-function initGSAP() {
-  gsap.killTweensOf('.rv'); 
-  gsap.set('.rv', { autoAlpha: 0, y: 40 });
+                return {
+                    totalSubtotal,
+                    totalGanancia
+                };
+            };
 
-  gsap.utils.toArray('.deco').forEach(d => {
-    gsap.to(d, { y: gsap.utils.random(-30, 30), x: gsap.utils.random(-20, 20), rotation: gsap.utils.random(-20, 20), duration: gsap.utils.random(3, 6), ease: "sine.inOut", yoyo: true, repeat: -1, delay: Math.random() * 2 });
-  });
-}
+            const hideAllViews = () => {
+                mananaView.classList.add('hidden');
+                tardeView.classList.add('hidden');
+                yearView.classList.add('hidden');
+                historialView.classList.add('hidden');
+                weeklyView.classList.add('hidden');
+                dayView.classList.add('hidden');
+            };
 
-function animateSectionIn(index) {
-  const sec = sections[index];
-  const els = sec.querySelectorAll('.rv');
-  gsap.to(els, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out", overwrite: true });
+            const setSwitchState = (opt) => {
+                toggleSwitch.classList.remove('slider-manana', 'slider-tarde', 'slider-pago');
+                btnManana.classList.toggle('active', opt === 'manana');
+                btnTarde.classList.toggle('active', opt === 'tarde');
+                btnPago.classList.toggle('active', opt === 'pago');
+                if (opt === 'manana') toggleSwitch.classList.add('slider-manana');
+                else if (opt === 'tarde') toggleSwitch.classList.add('slider-tarde');
+                else if (opt === 'pago') toggleSwitch.classList.add('slider-pago');
+            };
 
-  setTimeout(() => {
-    const floatEls = sec.querySelectorAll('.fl');
-    floatEls.forEach(t => {
-      gsap.to(t, { y: -10, duration: 2.5, ease: "sine.inOut", yoyo: true, repeat: -1, delay: Math.random() * 1 });
-    });
-  }, 1000);
-}
+            const activateButton = (button) => {
+                const isManana = button === btnManana;
+                const isTarde = button === btnTarde;
 
-function animateSectionOut(index) {
-  const sec = sections[index];
-  const els = sec.querySelectorAll('.rv');
-  gsap.killTweensOf(sec.querySelectorAll('.fl')); 
-  return gsap.to(els, { autoAlpha: 0, y: -30, duration: 0.4, ease: "power2.in", overwrite: true });
-}
+                if (isManana) setSwitchState('manana');
+                else if (isTarde) setSwitchState('tarde');
 
-function goToSection(idx) {
-  if (isAnimating || idx < 0 || idx >= totalSections) return;
-  isAnimating = true;
-  hideScrollHint(); 
-  animateSectionOut(currentSection);
-  gsap.to(slider, { y: `-${idx * 100}vh`, duration: 1, ease: "power3.inOut", onComplete: () => { 
-    currentSection = idx; 
-    animateSectionIn(currentSection); 
-    updateNav(); 
-    if(currentSection === 0) {
-      startScrollHintTimer();
-    }
-    setTimeout(() => { isAnimating = false; }, 200); 
-  } });
-}
+                // Si el modal de Pago estaba abierto, se cierra al cambiar de tabla
+                if (resumenModal.style.display === 'flex' && (isManana || isTarde)) {
+                    closeModalWithAnim(resumenModal);
+                }
 
-function updateNav() {
-  dots.forEach((d, i) => d.classList.toggle('act', i === currentSection));
-  if (currentSection >= totalSections - 1) { gsap.to(nextBtn, { autoAlpha: 0, scale: 0.5, duration: 0.3 }); } else { gsap.to(nextBtn, { autoAlpha: 1, scale: 1, duration: 0.3 }); }
-}
+                hideAllViews();
+                loadingSpinner.classList.remove('hidden');
 
-nextBtn.addEventListener('click', () => goToSection(currentSection + 1));
-dots.forEach(d => d.addEventListener('click', () => { const targetIdx = parseInt(d.dataset.i); goToSection(targetIdx); }));
-document.addEventListener('keydown', (e) => { if (!envelopeOpened) return; if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToSection(currentSection + 1); } else if (e.key === 'ArrowUp') { e.preventDefault(); goToSection(currentSection - 1); } });
+                setTimeout(() => {
+                    loadingSpinner.classList.add('hidden');
+                    if (isManana) {
+                        mananaView.classList.remove('hidden');
+                        mananaView.classList.remove('view-animate');
+                        void mananaView.offsetWidth;
+                        mananaView.classList.add('view-animate');
+                        updateViewTotals(mananaView);
+                    } else if (isTarde) {
+                        tardeView.classList.remove('hidden');
+                        tardeView.classList.remove('view-animate');
+                        void tardeView.offsetWidth;
+                        tardeView.classList.add('view-animate');
+                        updateViewTotals(tardeView);
+                    } else if (button === btnHistorial) {
+                        yearView.classList.remove('hidden');
+                        yearView.classList.add('view-animate');
+                    }
+                    if (typeof updateMoreOptionsVisibility === 'function') {
+                        updateMoreOptionsVisibility();
+                    }
+                }, 500);
+            };
 
-let touchStartY = 0;
-document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
-document.addEventListener('touchend', (e) => { 
-  if (!envelopeOpened) return; 
-  const diff = touchStartY - e.changedTouches[0].clientY; 
-  if (diff > 50) {
-    goToSection(currentSection + 1); 
-  } else if (diff < -50) {
-    goToSection(currentSection - 1);
-  }
-});
+            // Cierra un modal con animación de salida
+            const closeModalWithAnim = (modal) => {
+                const container = modal.querySelector('.modal-container');
+                modal.classList.remove('modal-anim-in');
+                modal.classList.add('modal-anim-out');
+                if (container) {
+                    container.classList.remove('modal-box-in');
+                    container.classList.add('modal-box-out');
+                }
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    modal.classList.remove('modal-anim-out');
+                    modal.classList.add('modal-anim-in');
+                    if (container) {
+                        container.classList.remove('modal-box-out');
+                        container.classList.add('modal-box-in');
+                    }
+                    body.style.overflow = 'auto';
+                }, 250);
+            };
 
-function resetInvitation() {
-  isAnimating = true;
-  hideScrollHint();
+            // Establecer el estado inicial
+            activateButton(btnManana);
+            // Oculta ambas columnas al inicio
+            mananaView.classList.remove('show-precio');
+            tardeView.classList.remove('show-precio');
+            mananaView.classList.remove('show-ganancia');
+            tardeView.classList.remove('show-ganancia');
 
-  const music = document.getElementById('bg-music');
-  if (music) {
-    music.pause();
-    music.currentTime = 0; 
-  }
 
-  gsap.killTweensOf('.fl'); 
+            btnManana.addEventListener('click', () => activateButton(btnManana));
+            btnTarde.addEventListener('click', () => {
+                activateButton(btnTarde);
+            });
+            document.querySelectorAll('.btn-historial').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activateButton(btnHistorial);
+                });
+            });
 
-  gsap.to(sections[currentSection].querySelectorAll('.rv'), { autoAlpha: 0, y: -30, duration: 0.5, ease: "power2.in", overwrite: true });
+            mainContainer.addEventListener('input', (event) => {
+                if (event.target.classList.contains('cantidad-input')) {
+                    const currentRow = event.target.closest('.product-row');
+                    const precioItem = currentRow.querySelector('.precio-item');
+                    const subtotalItem = currentRow.querySelector('.subtotal-item');
+                    const gananciaItem = currentRow.querySelector('.ganancia-item');
+                    subtotalItem.classList.remove('animate-neon-flash');
+                    void subtotalItem.offsetWidth;
+                    subtotalItem.classList.add('animate-neon-flash');
+                    gananciaItem.classList.remove('animate-neon-flash');
+                    void gananciaItem.offsetWidth;
+                    gananciaItem.classList.add('animate-neon-flash');
+                    setTimeout(() => {
+                        const cantidad = parseFloat(event.target.value) || 0;
+                        const precio = parseFloat(precioItem.dataset.price);
+                        const subtotal = cantidad * precio;
+                        let ganancia = 0;
+                        if (currentRow.dataset.profitMultiplier) {
+                            const profitMultiplier = parseFloat(currentRow.dataset.profitMultiplier);
+                            ganancia = (cantidad * profitMultiplier) - subtotal;
+                        } else {
+                            ganancia = subtotal * 0.20;
+                        }
+                        subtotalItem.innerHTML = moneyHTML(subtotal);
+                        subtotalItem.dataset.subtotal = subtotal;
+                        gananciaItem.innerHTML = moneyHTML(ganancia);
+                        gananciaItem.dataset.ganancia = ganancia;
+                        // Actualizar los totales de la vista activa
+                        const activeView = mananaView.classList.contains('hidden') ? tardeView : mananaView;
+                        updateViewTotals(activeView);
+                        // Guardar cantidades en Firestore para la vista correspondiente
+                        const viewElement = currentRow.closest('#manana-view, #tarde-view');
+                        if (viewElement) {
+                            saveProductQuantities(viewElement);
+                        }
+                    }, 500);
+                }
+            });
 
-  gsap.to(slider, { y: '0vh', duration: 1.5, ease: "power3.inOut", delay: 0.3, onComplete: () => {
-    currentSection = 0; envelopeOpened = false; envelope.classList.remove('opening'); hint.classList.remove('vis');
-    gsap.to(overlay, { opacity: 1, duration: 1, pointerEvents: 'auto' }); gsap.to(app, { opacity: 0, duration: 0.5 }); gsap.to(nextBtn, { autoAlpha: 0, duration: 0.3 }); navDotsEl.classList.remove('vis');
-    gsap.set('.rv', { autoAlpha: 0, y: 40 }); 
-    updateNav(); startHintTimer(); isAnimating = false;
-  }});
-}
+            // Abre el modal de Pago
+            const openResumenModal = () => {
+                const mananaTotals = updateViewTotals(mananaView);
+                const tardeTotals = updateViewTotals(tardeView);
+                const totalSubtotal = mananaTotals.totalSubtotal + tardeTotals.totalSubtotal;
 
-function downloadSouvenir() {
-  const name = document.getElementById('souvName').value.trim() || 'Invitado Especial';
-  const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1440; const c = canvas.getContext('2d');
-  
-  const bg = c.createLinearGradient(0, 0, canvas.width, canvas.height); 
-  bg.addColorStop(0, '#ffffff'); 
-  bg.addColorStop(0.5, '#fff0f5'); 
-  bg.addColorStop(1, '#ffccd8'); 
-  c.fillStyle = bg; 
-  c.fillRect(0, 0, canvas.width, canvas.height);
-  
-  const glow = c.createRadialGradient(540, 500, 50, 540, 500, 400); 
-  glow.addColorStop(0, 'rgba(233,30,99,0.06)'); 
-  glow.addColorStop(1, 'transparent'); 
-  c.fillStyle = glow; 
-  c.fillRect(0, 0, canvas.width, canvas.height);
-  
-  c.strokeStyle = 'rgba(233,30,99,0.2)'; c.lineWidth = 2; c.strokeRect(50, 50, canvas.width-100, canvas.height-100); 
-  c.strokeStyle = 'rgba(233,30,99,0.5)'; c.lineWidth = 3;
-  [[50,50,1,1],[980,50,-1,1],[50,1390,1,-1],[980,1390,-1,-1]].forEach(([x,y,dx,dy]) => { c.beginPath(); c.moveTo(x, y+dy*30); c.lineTo(x, y); c.lineTo(x+dx*30, y); c.stroke(); });
-  
-  c.textAlign = 'center'; c.font = '600 22px Poppins, sans-serif'; c.fillStyle = '#e91e63'; 
-  c.fillText('✦ INVITACIÓN ESPECIAL ✦', 540, 220); 
-  c.beginPath(); c.moveTo(390, 250); c.lineTo(690, 250); c.strokeStyle = 'rgba(233,30,99,0.2)'; c.lineWidth = 1; c.stroke();
-  
-  c.font = '300 28px Poppins, sans-serif'; c.fillStyle = '#4a0e2e'; c.fillText('Para:', 540, 340);
-  let nameSize = 72; c.font = `900 ${nameSize}px "Playfair Display", serif`; 
-  while (c.measureText(name).width > canvas.width - 160 && nameSize > 30) { nameSize -= 4; c.font = `900 ${nameSize}px "Playfair Display", serif`; }
-  
-  const nameGrad = c.createLinearGradient(340, 370, 740, 450); 
-  nameGrad.addColorStop(0, '#e91e63'); 
-  nameGrad.addColorStop(0.5, '#4a0e2e'); 
-  nameGrad.addColorStop(1, '#e91e63'); 
-  c.fillStyle = nameGrad; 
-  c.fillText(name, 540, 430);
-  
-  c.font = '300 24px Poppins, sans-serif'; c.fillStyle = '#4a0e2e'; c.fillText('del cumpleaños de', 540, 510);
-  c.font = '900 80px "Playfair Display", serif'; 
-  c.fillStyle = nameGrad; 
-  c.fillText('Mónica', 540, 610);
-  
-  c.font = '500 32px Poppins, sans-serif'; c.fillStyle = '#4a0e2e'; c.fillText('15 de Junio, 2026', 540, 730); 
-  c.font = '600 36px Poppins, sans-serif'; c.fillStyle = '#e91e63'; c.fillText('8:00 P.M.', 540, 785); 
-  
-  c.beginPath(); c.moveTo(440, 860); c.lineTo(640, 860); c.strokeStyle = 'rgba(233,30,99,0.15)'; c.stroke();
-  
-  c.font = '500 26px Poppins, sans-serif'; c.fillStyle = '#4a0e2e'; c.fillText('Salón en Villa Hermosa', 540, 920); 
-  c.font = '300 22px Poppins, sans-serif'; c.fillStyle = '#e91e63'; c.fillText('San Miguel Petapa', 540, 955);
-  
-  c.font = '300 22px Poppins, sans-serif'; c.fillStyle = 'rgba(74,14,46,0.7)'; c.fillText('Ciudad de Guatemala', 540, 1030); 
-  c.font = '300 20px Poppins, sans-serif'; c.fillStyle = 'rgba(74,14,46,0.5)'; c.fillText('Le invitan sus queridos padres', 540, 1080);
-  c.font = '28px serif'; c.fillStyle = '#e91e63'; c.fillText('❤  ✦  ❤', 540, 1160); 
-  c.font = '300 18px Poppins, sans-serif'; c.fillStyle = 'rgba(74,14,46,0.35)'; c.fillText('Con cariño, Familia...', 540, 1250);
-  
-  const link = document.createElement('a'); link.download = 'invitacion-monica.png'; link.href = canvas.toDataURL('image/png'); link.click();
-}
-</script>
+                modalSpinner.classList.remove('hidden');
+                resumenData.classList.add('hidden');
+                resumenModal.style.display = 'flex';
+                body.style.overflow = 'hidden';
+
+                setTimeout(() => {
+                    modalSpinner.classList.add('hidden');
+                    pagoTotalSpan.innerHTML = moneyHTML(totalSubtotal);
+                    resumenData.classList.remove('hidden');
+                }, 1000);
+            };
+
+            // Botón Pago dentro del switch
+            btnPago.addEventListener('click', () => {
+                setSwitchState('pago');
+                openResumenModal();
+            });
+
+            // Función para alternar la visibilidad de la columna
+            const toggleColumn = (viewElement, className) => {
+                viewElement.classList.toggle(className);
+            };
+
+            const toggleVisibility = (btn, viewClass) => {
+                const arrow = btn.querySelector('svg');
+                if (arrow) arrow.classList.toggle('rotate-180');
+                toggleColumn(mananaView, viewClass);
+                toggleColumn(tardeView, viewClass);
+            };
+
+            // Event listener para los botones de precio (en ambas tablas)
+            togglePrecioBtns.forEach(btn => btn.addEventListener('click', () => toggleVisibility(btn, 'show-precio')));
+            // Event listener para los botones de ganancia (en ambas tablas)
+            toggleGananciaBtns.forEach(btn => btn.addEventListener('click', () => toggleVisibility(btn, 'show-ganancia')));
+
+            // Helper para animar la entrada de una vista
+            const animateView = (el) => {
+                el.classList.remove('view-animate');
+                void el.offsetWidth;
+                el.classList.add('view-animate');
+            };
+
+            // Manejador de eventos para los años
+            yearList.addEventListener('click', (event) => {
+                const yearItem = event.target.closest('.year-item');
+                if (yearItem) {
+                    currentYear = yearItem.dataset.year;
+                    monthlyTitle.textContent = `Ganancias de ${currentYear}`;
+                    yearView.classList.add('hidden');
+                    historialView.classList.remove('hidden');
+                    animateView(historialView);
+                    loadMonthTotals(currentYear);
+                }
+            });
+
+            // Manejador de eventos para los meses
+            monthlyList.addEventListener('click', (event) => {
+                const monthItem = event.target.closest('.month-item');
+                if (monthItem) {
+                    currentMonthName = monthItem.dataset.month;
+                    currentMonthIndex = parseInt(monthItem.dataset.monthIndex);
+                    weeklyTitle.textContent = `Ganancias de ${currentMonthName}`;
+                    historialView.classList.add('hidden');
+                    weeklyView.classList.remove('hidden');
+                    animateView(weeklyView);
+                    loadWeekTotals(currentYear, currentMonthIndex + 1);
+                }
+            });
+
+            // Manejador de eventos para las semanas
+            weeklyList.addEventListener('click', (event) => {
+                const weekItem = event.target.closest('.week-item');
+                if (weekItem) {
+                    currentWeekNumber = parseInt(weekItem.dataset.week);
+                    dayTitle.textContent = `Ganancias de la Semana ${currentWeekNumber} - ${currentMonthName} de ${currentYear}`;
+                    weeklyView.classList.add('hidden');
+                    dayView.classList.remove('hidden');
+                    animateView(dayView);
+                    dayList.innerHTML = '';
+                    // Determinar la fecha de inicio de la semana
+                    const startDay = (currentWeekNumber - 1) * 7 + 1;
+                    const startDate = new Date(currentYear, currentMonthIndex, startDay);
+                    for (let i = 0; i < 7; i++) {
+                        const currentDate = new Date(startDate);
+                        currentDate.setDate(startDate.getDate() + i);
+                        if (currentDate.getMonth() !== currentMonthIndex) {
+                            break;
+                        }
+                        const dayName = daysOfWeek[currentDate.getDay()];
+                        const dateNumber = currentDate.getDate();
+                        const dayElement = document.createElement('div');
+                        dayElement.className = 'flex justify-between items-center py-2 border-b border-gray-600 cursor-pointer day-item';
+                        dayElement.innerHTML = `
+                            <span class="font-medium">${dayName} ${dateNumber}</span>
+                            <span class="font-bold text-lg text-[#c3ff3d]">${qsymbol}0</span>
+                        `;
+                        dayList.appendChild(dayElement);
+                    }
+                    // Cargar totales de días
+                    loadDayTotals(currentYear, currentMonthIndex + 1, currentWeekNumber);
+                }
+            });
+
+            // Botón para volver de meses a años
+            backToYearsBtn.addEventListener('click', () => {
+                historialView.classList.add('hidden');
+                yearView.classList.remove('hidden');
+                animateView(yearView);
+            });
+
+            // Botón para volver de semanas a meses
+            backToMonthsBtn.addEventListener('click', () => {
+                weeklyView.classList.add('hidden');
+                historialView.classList.remove('hidden');
+                animateView(historialView);
+            });
+
+            // Botón para volver de días a semanas
+            backToWeeksBtn.addEventListener('click', () => {
+                dayView.classList.add('hidden');    // Oculta la vista de días
+                weeklyView.classList.remove('hidden'); // Muestra la vista de semanas
+                animateView(weeklyView);
+            });
+
+            // --- INICIO: Guardado manual de resumen diario con confirmación (sin alertas del navegador) ---
+
+            // Event listener para el botón principal de guardar datos del día
+            const openSaveModal = () => {
+                confirmSaveModal.style.display = 'flex'; // Muestra el modal de confirmación
+                body.style.overflow = 'hidden'; // Evita el scroll del body mientras el modal está abierto
+            };
+
+            document.querySelectorAll('.btn-guardar-diario').forEach(btn => {
+                btn.addEventListener('click', openSaveModal);
+            });
+
+            // Event listener para el botón "Guardar" dentro del modal de confirmación
+            confirmSaveBtn.addEventListener('click', async () => {
+                closeModalWithAnim(confirmSaveModal); // Oculta el modal de confirmación con animación
+
+                // Obtiene la fecha actual para el guardado
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1; // Meses de 1 a 12
+                const day = now.getDate();
+                const week = Math.ceil(day / 7); // Calcula la semana del mes (1-5)
+
+                // Construye el ID del documento para el día específico en Firestore
+                const dayId = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const resumenRef = db.collection('historial').doc(`${year}`).collection(`${month}`).doc(`sem${week}`).collection('dias').doc(dayId);
+
+                // Calcula los totales de las vistas de mañana y tarde
+                const mananaTotals = updateViewTotals(mananaView);
+                const tardeTotals = updateViewTotals(tardeView);
+                const totalGanancia = mananaTotals.totalGanancia + tardeTotals.totalGanancia;
+
+                try {
+                    // Guarda o actualiza el documento en Firestore
+                    await resumenRef.set({
+                        year,
+                        month,
+                        week,
+                        day,
+                        totalGanancia,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp() // Sello de tiempo del servidor
+                    });
+                    // Ya no hay alerta de éxito
+
+                    // Recarga los totales del historial para que el nuevo guardado sea visible
+                    await loadYearTotals();
+                    if (currentYear) await loadMonthTotals(currentYear);
+                    if (currentYear && currentMonthIndex !== null) await loadWeekTotals(currentYear, currentMonthIndex + 1);
+                    if (currentYear && currentMonthIndex !== null && currentWeekNumber) await loadDayTotals(currentYear, currentMonthIndex + 1, currentWeekNumber);
+
+                } catch (e) {
+                    console.error('Error guardando los totales del día:', e);
+                }
+            });
+
+            // Event listener para el botón "Cancelar" dentro del modal de confirmación
+            cancelSaveBtn.addEventListener('click', () => {
+                closeModalWithAnim(confirmSaveModal);
+            });
+            // --- FIN: Guardado manual de resumen diario con confirmación (sin alertas del navegador) ---
+
+
+            // --- INICIO: Borrado de datos de tabla actual con confirmación ---
+            const openDeleteModal = () => {
+                // Determinar la tabla actual
+                const activeView = mananaView.classList.contains('hidden') ?
+                    (tardeView.classList.contains('hidden') ? mananaView : tardeView) :
+                    mananaView;
+                const tabla = activeView === tardeView ? 'Tarde' : 'Mañana';
+                deleteModalViewSpan.textContent = tabla;
+                confirmDeleteModal.style.display = 'flex'; // Muestra el modal de confirmación para borrar
+                body.style.overflow = 'hidden'; // Evita el scroll del body
+            };
+
+            document.querySelectorAll('.btn-borrar-actual').forEach(btn => {
+                btn.addEventListener('click', openDeleteModal);
+            });
+
+            confirmDeleteBtn.addEventListener('click', async () => {
+                closeModalWithAnim(confirmDeleteModal);
+
+                const activeView = mananaView.classList.contains('hidden') ?
+                    (tardeView.classList.contains('hidden') ? mananaView : tardeView) :
+                    mananaView;
+                const viewName = getViewName(activeView); // 'manana' o 'tarde'
+
+                // Resetear todos los inputs de cantidad a vacío y actualizar subtotales
+                const quantityInputs = activeView.querySelectorAll('.cantidad-input');
+                quantityInputs.forEach(input => {
+                    input.value = ""; // Vacía el input
+                    input.dispatchEvent(new Event('input', { bubbles: true })); // Dispara el evento para recalcular
+                });
+
+                // Borrar los datos de la vista actual en Firestore
+                try {
+                    // Si el documento para la vista existe, lo actualizamos a un objeto vacío
+                    // para borrar todas las cantidades guardadas.
+                    // Usamos set({}) en lugar de delete() para mantener el documento si es necesario,
+                    // pero vaciar sus campos de cantidades.
+                    await db.collection('ventas').doc(viewName).set({});
+                    console.log(`Datos de la tabla "${viewName}" borrados exitosamente en Firestore.`);
+                } catch (e) {
+                    console.error(`Error borrando datos de la tabla "${viewName}" en Firestore:`, e);
+                }
+            });
+
+            cancelDeleteBtn.addEventListener('click', () => {
+                closeModalWithAnim(confirmDeleteModal);
+            });
+            // --- FIN: Borrado de datos de tabla actual con confirmación ---
+
+            // --- INICIO: Botón "Más opciones" visible solo al final de la página ---
+            const moreOptionsPanel = document.getElementById('more-options-panel');
+            const moreOptionsBtn = document.getElementById('more-options-btn');
+            const moreOptionsRow = document.getElementById('more-options-row');
+
+            const collapseMoreOptions = () => {
+                moreOptionsBtn.classList.remove('hidden');
+                moreOptionsRow.classList.add('hidden');
+            };
+
+            const hideMoreOptions = () => {
+                moreOptionsPanel.classList.add('hidden');
+                collapseMoreOptions();
+            };
+
+            const updateMoreOptionsVisibility = () => {
+                const docHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+                const nearBottom = (window.innerHeight + window.scrollY) >= (docHeight - 90);
+                if (nearBottom) {
+                    moreOptionsPanel.classList.remove('hidden');
+                } else {
+                    hideMoreOptions();
+                }
+            };
+
+            moreOptionsBtn.addEventListener('click', () => {
+                moreOptionsBtn.classList.add('hidden');
+                moreOptionsRow.classList.remove('hidden');
+            });
+
+            window.addEventListener('scroll', updateMoreOptionsVisibility, { passive: true });
+            window.addEventListener('resize', updateMoreOptionsVisibility);
+            updateMoreOptionsVisibility();
+            // --- FIN: Botón "Más opciones" ---
+
+        }); // Cierra el DOMContentLoaded correctamente aquí.
+    </script>
 </body>
+
 </html>
