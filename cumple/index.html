@@ -430,19 +430,19 @@
         <div class="fixed bottom-0 left-0 right-0 z-[999] flex flex-col items-center px-4 pb-3 pointer-events-none">
             <!-- Panel: se asoma detrás del conmutador (aparece al llegar al final de la página) -->
             <div id="more-options-panel"
-                class="hidden flex flex-col items-center relative z-0 mb-[-8px] pointer-events-auto">
+                class="hidden flex flex-col items-center relative z-0 mb-[-6px] pointer-events-auto">
                 <button id="more-options-btn"
-                    class="px-4 py-1.5 rounded-t-xl border-b-0 border border-white/15 bg-white/10 backdrop-blur-sm text-xs font-medium text-gray-200"
+                    class="px-4 py-2 rounded-t-xl border-b-0 border border-white/15 bg-white/10 backdrop-blur-sm text-xs font-medium text-gray-200"
                     title="Mostrar más opciones">
                     Más opciones
                 </button>
-                <div id="more-options-row" class="hidden flex items-center justify-center w-full gap-2 bg-black/70 backdrop-blur-md border-b-0 border border-white/15 rounded-t-2xl px-3 py-2">
-                    <button class="toggle-precio-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
-                        title="Mostrar/Ocultar precios">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 18l6-6-6-6" />
+                <div id="more-options-row" class="hidden flex items-center justify-center w-full gap-2 bg-black/70 backdrop-blur-md border-b-0 border border-white/15 rounded-t-2xl px-3 pt-2 pb-3">
+                    <button id="more-options-close-btn"
+                        class="p-2 w-8 h-8 flex items-center justify-center rounded-lg glass-btn text-gray-300"
+                        title="Cerrar más opciones">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 6l12 12M18 6L6 18" />
                         </svg>
                     </button>
                     <button class="btn-borrar-actual w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none"
@@ -450,9 +450,13 @@
                         <img src="https://i.postimg.cc/zfz6ZsHK/borrar-icon.png" alt="Borrar" class="w-8 h-8 object-contain">
                     </button>
                     <button class="btn-historial px-4 py-2 rounded-full font-medium glass-btn">Historial</button>
-                    <button class="btn-guardar-diario w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none"
-                        title="Guardar totales del día">
-                        <img src="https://i.postimg.cc/MvdBQMDz/guardar-icon.png" alt="Guardar" class="w-8 h-8 object-contain">
+                    <button class="toggle-precio-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
+                        title="Mostrar/Ocultar precios">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
                     </button>
                     <button class="toggle-ganancia-btn p-2 w-10 h-10 flex items-center justify-center rounded-lg glass-btn"
                         title="Mostrar/Ocultar ganancias">
@@ -1147,30 +1151,9 @@
                 class="mt-4 px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Volver</button>
         </div>
 
-        </div>
+</div>
 
-    <!-- Nuevo Modal de Confirmación para Guardar -->
-    <div id="confirm-save-modal" class="modal modal-anim-in">
-        <div class="modal-container modal-box-in">
-            <div class="modal-content text-white flex flex-col items-center">
-                <h2 class="text-2xl font-bold mb-4">¿Guardar los datos?</h2>
-                <p class="text-sm text-gray-400 mb-8 text-center">Si ya había datos guardados del día de hoy, se
-                    reemplazarán por los datos actuales.</p>
-                <div class="flex gap-4">
-                    <button id="confirm-save-btn"
-                        class="px-6 py-2 rounded-full font-medium bg-[#c3ff3d] text-black transition duration-300">
-                        Guardar
-                    </button>
-                    <button id="cancel-save-btn"
-                        class="px-6 py-2 rounded-full font-medium bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 active:bg-gray-600 transition duration-300">
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- Nuevo Modal de Confirmación para Borrar -->
+    <!-- Nuevo Modal de Confirmación para Borrar -->
     <div id="confirm-delete-modal" class="modal modal-anim-in">
         <div class="modal-container modal-box-in">
             <div class="modal-content text-white flex flex-col items-center">
@@ -1451,10 +1434,7 @@
             const resumenData = document.getElementById('resumen-data');
             const pagoTotalSpan = document.getElementById('pago-total');
             const body = document.body;
-            const confirmSaveModal = document.getElementById('confirm-save-modal'); // Nuevo
-            const confirmSaveBtn = document.getElementById('confirm-save-btn'); // Nuevo
-            const cancelSaveBtn = document.getElementById('cancel-save-btn'); // Nuevo
-                        // Nuevas constantes para el botón y modal de borrar
+            // Nuevas constantes para el botón y modal de borrar
             const confirmDeleteModal = document.getElementById('confirm-delete-modal'); // Nuevo
             const confirmDeleteBtn = document.getElementById('confirm-delete-btn'); // Nuevo
             const cancelDeleteBtn = document.getElementById('cancel-delete-btn'); // Nuevo
@@ -1645,7 +1625,7 @@
                 }
             });
 
-            // Abre el modal de Pago
+            // Abre el modal de Pago y guarda automáticamente el día (sin confirmación)
             const openResumenModal = () => {
                 const mananaTotals = updateViewTotals(mananaView);
                 const tardeTotals = updateViewTotals(tardeView);
@@ -1655,6 +1635,37 @@
                 resumenData.classList.add('hidden');
                 resumenModal.style.display = 'flex';
                 body.style.overflow = 'hidden';
+
+                // --- Guardado automático del día en Firestore (no bloquea el modal) ---
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1; // Meses de 1 a 12
+                const day = now.getDate();
+                const week = Math.ceil(day / 7); // Calcula la semana del mes (1-5)
+
+                // Construye el ID del documento para el día específico en Firestore
+                const dayId = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const resumenRef = db.collection('historial').doc(`${year}`).collection(`${month}`).doc(`sem${week}`).collection('dias').doc(dayId);
+
+                // Guarda o actualiza el documento y refresca el historial en segundo plano
+                resumenRef.set({
+                    year,
+                    month,
+                    week,
+                    day,
+                    totalGanancia: mananaTotals.totalGanancia + tardeTotals.totalGanancia,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp() // Sello de tiempo del servidor
+                }).then(() => {
+                    return loadYearTotals().then(() => {
+                        if (currentYear) return loadMonthTotals(currentYear);
+                    }).then(() => {
+                        if (currentYear && currentMonthIndex !== null) return loadWeekTotals(currentYear, currentMonthIndex + 1);
+                    }).then(() => {
+                        if (currentYear && currentMonthIndex !== null && currentWeekNumber) return loadDayTotals(currentYear, currentMonthIndex + 1, currentWeekNumber);
+                    });
+                }).catch(e => {
+                    console.error('Error guardando los totales del día:', e);
+                });
 
                 setTimeout(() => {
                     modalSpinner.classList.add('hidden');
@@ -1797,68 +1808,6 @@
                 animateView(weeklyView);
             });
 
-            // --- INICIO: Guardado manual de resumen diario con confirmación (sin alertas del navegador) ---
-
-            // Event listener para el botón principal de guardar datos del día
-            const openSaveModal = () => {
-                confirmSaveModal.style.display = 'flex'; // Muestra el modal de confirmación
-                body.style.overflow = 'hidden'; // Evita el scroll del body mientras el modal está abierto
-            };
-
-            document.querySelectorAll('.btn-guardar-diario').forEach(btn => {
-                btn.addEventListener('click', openSaveModal);
-            });
-
-            // Event listener para el botón "Guardar" dentro del modal de confirmación
-            confirmSaveBtn.addEventListener('click', async () => {
-                closeModalWithAnim(confirmSaveModal); // Oculta el modal de confirmación con animación
-
-                // Obtiene la fecha actual para el guardado
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = now.getMonth() + 1; // Meses de 1 a 12
-                const day = now.getDate();
-                const week = Math.ceil(day / 7); // Calcula la semana del mes (1-5)
-
-                // Construye el ID del documento para el día específico en Firestore
-                const dayId = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const resumenRef = db.collection('historial').doc(`${year}`).collection(`${month}`).doc(`sem${week}`).collection('dias').doc(dayId);
-
-                // Calcula los totales de las vistas de mañana y tarde
-                const mananaTotals = updateViewTotals(mananaView);
-                const tardeTotals = updateViewTotals(tardeView);
-                const totalGanancia = mananaTotals.totalGanancia + tardeTotals.totalGanancia;
-
-                try {
-                    // Guarda o actualiza el documento en Firestore
-                    await resumenRef.set({
-                        year,
-                        month,
-                        week,
-                        day,
-                        totalGanancia,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp() // Sello de tiempo del servidor
-                    });
-                    // Ya no hay alerta de éxito
-
-                    // Recarga los totales del historial para que el nuevo guardado sea visible
-                    await loadYearTotals();
-                    if (currentYear) await loadMonthTotals(currentYear);
-                    if (currentYear && currentMonthIndex !== null) await loadWeekTotals(currentYear, currentMonthIndex + 1);
-                    if (currentYear && currentMonthIndex !== null && currentWeekNumber) await loadDayTotals(currentYear, currentMonthIndex + 1, currentWeekNumber);
-
-                } catch (e) {
-                    console.error('Error guardando los totales del día:', e);
-                }
-            });
-
-            // Event listener para el botón "Cancelar" dentro del modal de confirmación
-            cancelSaveBtn.addEventListener('click', () => {
-                closeModalWithAnim(confirmSaveModal);
-            });
-            // --- FIN: Guardado manual de resumen diario con confirmación (sin alertas del navegador) ---
-
-
             // --- INICIO: Borrado de datos de tabla actual con confirmación ---
             const openDeleteModal = () => {
                 // Determinar la tabla actual
@@ -1936,6 +1885,11 @@
             moreOptionsBtn.addEventListener('click', () => {
                 moreOptionsBtn.classList.add('hidden');
                 moreOptionsRow.classList.remove('hidden');
+            });
+
+            // Botón equis: cierra las opciones expandidas
+            document.getElementById('more-options-close-btn').addEventListener('click', () => {
+                collapseMoreOptions();
             });
 
             window.addEventListener('scroll', updateMoreOptionsVisibility, { passive: true });
